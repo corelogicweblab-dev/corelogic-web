@@ -13,8 +13,8 @@ export function NeuralBackground() {
 
     let animationId: number;
     const nodes: { x: number; y: number; vx: number; vy: number }[] = [];
-    const nodeCount = 45;
-    const connectionDistance = 130;
+    const nodeCount = 50;
+    const connectionDistance = 140;
 
     const resize = () => {
       canvas.width = canvas.offsetWidth * window.devicePixelRatio;
@@ -30,8 +30,8 @@ export function NeuralBackground() {
         nodes.push({
           x: Math.random() * w,
           y: Math.random() * h,
-          vx: (Math.random() - 0.5) * 0.35,
-          vy: (Math.random() - 0.5) * 0.35,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
         });
       }
     };
@@ -48,9 +48,12 @@ export function NeuralBackground() {
         if (node.y < 0 || node.y > h) node.vy *= -1;
 
         ctx.beginPath();
-        ctx.arc(node.x, node.y, 1.5, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(14, 165, 233, 0.5)";
+        ctx.arc(node.x, node.y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(0, 212, 255, 0.7)";
+        ctx.shadowColor = "rgba(0, 212, 255, 0.8)";
+        ctx.shadowBlur = 8;
         ctx.fill();
+        ctx.shadowBlur = 0;
       }
 
       for (let i = 0; i < nodes.length; i++) {
@@ -59,12 +62,20 @@ export function NeuralBackground() {
           const dy = nodes[i].y - nodes[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < connectionDistance) {
-            const alpha = (1 - dist / connectionDistance) * 0.2;
+            const alpha = (1 - dist / connectionDistance) * 0.35;
+            const grad = ctx.createLinearGradient(
+              nodes[i].x,
+              nodes[i].y,
+              nodes[j].x,
+              nodes[j].y
+            );
+            grad.addColorStop(0, `rgba(0, 212, 255, ${alpha})`);
+            grad.addColorStop(1, `rgba(139, 92, 246, ${alpha * 0.8})`);
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.strokeStyle = `rgba(99, 102, 241, ${alpha})`;
-            ctx.lineWidth = 0.6;
+            ctx.strokeStyle = grad;
+            ctx.lineWidth = 0.8;
             ctx.stroke();
           }
         }
@@ -83,5 +94,5 @@ export function NeuralBackground() {
     return () => cancelAnimationFrame(animationId);
   }, []);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 h-full w-full opacity-40" aria-hidden />;
+  return <canvas ref={canvasRef} className="absolute inset-0 h-full w-full opacity-50" aria-hidden />;
 }

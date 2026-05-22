@@ -71,7 +71,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${inter.variable} ${spaceGrotesk.variable} ${orbitron.variable} min-h-screen bg-[#f0f7ff] text-slate-900 antialiased`}
+        className={`${inter.variable} ${spaceGrotesk.variable} ${orbitron.variable} min-h-screen bg-[#eef6ff] text-slate-900 antialiased`}
       >
         <Script
           id="json-ld-org"

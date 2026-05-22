@@ -9,6 +9,7 @@ interface ContactBody {
   email?: string;
   message?: string;
   project?: string;
+  source?: string;
 }
 
 function isValidEmail(email: string) {
@@ -89,6 +90,7 @@ export async function POST(request: NextRequest) {
     const email = body.email?.trim().toLowerCase();
     const message = body.message?.trim();
     const project = body.project?.trim();
+    const source = body.source?.trim();
 
     if (!name || name.length < 2) {
       return NextResponse.json({ error: "Please enter your name." }, { status: 400 });
@@ -103,10 +105,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const record = { name, email, message, project: project || null };
+    const record = { name, email, message, project: project || null, source: source || null };
     await appendJsonRecord("inquiries.json", record);
 
-    const payload = { name, email, message, project: project || undefined };
+    const payload = {
+      name,
+      email,
+      message,
+      project: project || (source === "live-support" ? "Live Support" : undefined),
+    };
     const emailed =
       (await sendViaResend(payload)) || (await sendViaFormSubmit(payload));
 
@@ -122,8 +129,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message:
-        "Your message was sent directly to our team at corelogicweblab@gmail.com. We'll respond within 24 hours.",
+      message: "Thank you! We received your message and will respond within 24 hours.",
       emailed: true,
     });
   } catch (error) {

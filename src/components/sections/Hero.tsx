@@ -64,15 +64,16 @@ export function Hero() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="hero-reveal mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-sky-200 bg-white/80 px-4 py-2 shadow-sm"
+            className="hero-reveal badge-future"
           >
-            <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-emerald-500" />
-            <span className="text-xs font-semibold tracking-wider text-sky-700 uppercase">
-              {systemLabel}
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-500" />
             </span>
+            {systemLabel}
           </motion.div>
 
-          <h1 className="hero-reveal font-[family-name:var(--font-space-grotesk)] text-4xl font-bold leading-[1.08] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl xl:text-7xl">
+          <h1 className="hero-reveal text-glow font-[family-name:var(--font-space-grotesk)] text-4xl font-bold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl xl:text-7xl">
             Engineering Intelligent{" "}
             <span className="text-gradient">Digital Infrastructure</span>
           </h1>
@@ -92,10 +93,10 @@ export function Hero() {
             </Link>
           </div>
 
-          <div className="hero-reveal mt-14 grid grid-cols-3 gap-6 border-t border-sky-100 pt-10">
+          <div className="hero-reveal mt-14 grid grid-cols-3 gap-6 border-t border-cyan-400/20 pt-10">
             {HERO_STATS.map((stat) => (
               <div key={stat.label}>
-                <p className="font-[family-name:var(--font-orbitron)] text-2xl font-bold text-sky-600 md:text-3xl">
+                <p className="font-[family-name:var(--font-orbitron)] text-2xl font-bold text-cyan-600 md:text-3xl drop-shadow-[0_0_12px_rgba(0,212,255,0.4)]">
                   <AnimatedCounter
                     value={stat.value}
                     suffix={stat.suffix}
@@ -112,21 +113,25 @@ export function Hero() {
           <motion.div
             animate={{ y: [0, -8, 0] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-            className="card-elevated relative w-full max-w-md rounded-3xl border-2 border-sky-100 bg-white p-6 shadow-2xl shadow-sky-500/15 md:p-8"
+            className="holo-glass hud-corners relative w-full max-w-md rounded-2xl p-6 md:p-8"
           >
-            <div className="mb-6 flex items-center justify-between border-b border-sky-100 pb-4">
-              <span className="text-xs font-bold tracking-widest text-slate-500 uppercase">
-                Live Platform
+            <div className="mb-6 flex items-center justify-between border-b border-cyan-400/20 pb-4">
+              <span className="font-[family-name:var(--font-orbitron)] text-[10px] font-bold tracking-[0.2em] text-cyan-700 uppercase">
+                System HUD
               </span>
-              <div className="flex items-center gap-2 rounded-full bg-emerald-50 px-2 py-1">
-                <Activity className="h-4 w-4 text-emerald-600" />
-                <span className="text-xs font-semibold text-emerald-700">Live</span>
+              <div className="flex items-center gap-2 rounded border border-cyan-400/30 bg-cyan-400/10 px-2 py-1">
+                <Activity className="h-3.5 w-3.5 text-cyan-600" />
+                <span className="font-[family-name:var(--font-orbitron)] text-[10px] font-bold text-cyan-700 uppercase">
+                  Live
+                </span>
               </div>
             </div>
 
             <div className="mb-8 text-center">
-              <p className="text-sm font-medium text-slate-500">Platform Uptime</p>
-              <p className="font-[family-name:var(--font-orbitron)] text-5xl font-bold text-sky-600 md:text-6xl">
+              <p className="font-[family-name:var(--font-orbitron)] text-[10px] tracking-widest text-slate-500 uppercase">
+                Platform Uptime
+              </p>
+              <p className="font-[family-name:var(--font-orbitron)] text-5xl font-bold text-cyan-600 drop-shadow-[0_0_20px_rgba(0,212,255,0.5)] md:text-6xl">
                 <AnimatedCounter value={health?.uptime ?? 99.99} suffix="%" decimals={2} />
               </p>
             </div>
@@ -138,14 +143,14 @@ export function Hero() {
                   initial={{ opacity: 0, x: 16 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.6 + i * 0.12 }}
-                  className="flex items-center gap-3 rounded-xl border border-sky-100 bg-sky-50/50 px-4 py-3"
+                  className="flex items-center gap-3 rounded-lg border border-cyan-400/15 bg-white/50 px-4 py-3 backdrop-blur-sm"
                 >
-                  {i === 0 && <Sparkles className="h-5 w-5 text-sky-500" />}
-                  {i === 1 && <Shield className="h-5 w-5 text-indigo-500" />}
-                  {i === 2 && <Activity className="h-5 w-5 text-emerald-500" />}
+                  {i === 0 && <Sparkles className="h-5 w-5 text-cyan-500 drop-shadow-[0_0_8px_rgba(0,212,255,0.6)]" />}
+                  {i === 1 && <Shield className="h-5 w-5 text-violet-500" />}
+                  {i === 2 && <Activity className="h-5 w-5 text-cyan-600" />}
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold text-slate-800">{item.label}</p>
-                    <p className="text-xs font-medium text-emerald-600 capitalize">
+                    <p className="font-[family-name:var(--font-orbitron)] text-[10px] font-semibold text-cyan-600 uppercase capitalize">
                       {health?.services
                         ? i === 0
                           ? health.services.ai
@@ -155,17 +160,17 @@ export function Hero() {
                         : item.status}
                     </p>
                   </div>
-                  <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-cyan-400 shadow-[0_0_8px_#00d4ff]" />
                 </motion.div>
               ))}
             </div>
 
-            <div className="mt-6 h-24 overflow-hidden rounded-xl border border-sky-100 bg-slate-50">
-              <div className="flex h-full items-end gap-1 px-3 pb-2">
+            <div className="mt-6 h-24 overflow-hidden rounded-lg border border-cyan-400/20 bg-cyan-950/5">
+              <div className="flex h-full items-end gap-0.5 px-3 pb-2">
                 {BAR_HEIGHTS.map((h, i) => (
                   <motion.div
                     key={i}
-                    className="flex-1 rounded-t bg-gradient-to-t from-sky-300 to-sky-500"
+                    className="flex-1 rounded-t bg-gradient-to-t from-cyan-300 via-cyan-500 to-violet-400 shadow-[0_0_10px_rgba(0,212,255,0.4)]"
                     animate={{ height: [`${h}%`, `${Math.max(25, h - 15)}%`] }}
                     transition={{
                       duration: 1.2 + (i % 5) * 0.2,
@@ -186,8 +191,10 @@ export function Hero() {
           transition={{ repeat: Infinity, duration: 2 }}
           className="flex flex-col items-center gap-2 text-slate-400"
         >
-          <span className="text-[10px] font-medium tracking-widest uppercase">Scroll</span>
-          <div className="h-8 w-px bg-gradient-to-b from-sky-400 to-transparent" />
+          <span className="font-[family-name:var(--font-orbitron)] text-[10px] tracking-[0.3em] text-cyan-600/70 uppercase">
+            Scroll
+          </span>
+          <div className="h-10 w-px bg-gradient-to-b from-cyan-400 to-transparent shadow-[0_0_8px_#00d4ff]" />
         </motion.div>
       </div>
     </section>

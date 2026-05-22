@@ -20,8 +20,14 @@ export function Logo({ showText = true, size = "md", className = "" }: LogoProps
   return (
     <Link href="/" className={`group flex items-center gap-3 ${className}`}>
       <div
-        className="relative flex shrink-0 items-center justify-center overflow-hidden rounded-xl border border-sky-200 bg-white shadow-md shadow-sky-500/15 transition-all group-hover:border-sky-400 group-hover:shadow-lg group-hover:shadow-sky-500/25"
-        style={{ width: dim.box, height: dim.box }}
+        className="relative flex shrink-0 items-center justify-center overflow-hidden rounded-xl transition-all group-hover:shadow-[0_0_30px_rgba(0,212,255,0.4)]"
+        style={{
+          width: dim.box,
+          height: dim.box,
+          background: "linear-gradient(135deg, rgba(255,255,255,0.95), rgba(224,242,254,0.8))",
+          border: "1px solid rgba(0, 212, 255, 0.4)",
+          boxShadow: "0 0 20px rgba(0, 212, 255, 0.2)",
+        }}
       >
         <Image
           src={SITE.logoSrc}
@@ -38,7 +44,7 @@ export function Logo({ showText = true, size = "md", className = "" }: LogoProps
           <span className="font-[family-name:var(--font-space-grotesk)] text-sm font-bold text-slate-900">
             CoreLogic
           </span>
-          <span className="block font-[family-name:var(--font-orbitron)] text-[10px] font-semibold tracking-[0.2em] text-sky-600 uppercase">
+          <span className="block font-[family-name:var(--font-orbitron)] text-[10px] font-bold tracking-[0.25em] text-cyan-600 uppercase">
             {SITE.tagline}
           </span>
         </div>

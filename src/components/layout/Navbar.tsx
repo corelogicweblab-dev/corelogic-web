@@ -24,7 +24,7 @@ export function Navbar() {
       animate={{ y: 0, opacity: 1 }}
       className={`fixed top-0 right-0 left-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "border-b border-sky-100 bg-white/90 shadow-lg shadow-sky-500/5 backdrop-blur-xl"
+          ? "holo-glass border-b border-cyan-400/20 shadow-lg shadow-cyan-500/10"
           : "bg-transparent"
       }`}
     >
@@ -36,7 +36,7 @@ export function Navbar() {
             <li key={link.href}>
               <Link
                 href={link.href}
-                className="text-sm font-medium text-slate-600 transition-colors hover:text-sky-600"
+                className="font-[family-name:var(--font-orbitron)] text-[11px] font-semibold tracking-widest text-slate-600 uppercase transition-colors hover:text-cyan-600"
               >
                 {link.label}
               </Link>
@@ -45,13 +45,13 @@ export function Navbar() {
         </ul>
 
         <div className="flex items-center gap-3">
-          <Link href={CONTACT_HREF} className="btn-primary hidden !py-2.5 !px-5 sm:inline-flex">
+          <Link href={CONTACT_HREF} className="btn-primary hidden !text-[11px] sm:inline-flex">
             Start Project
             <ArrowRight className="h-4 w-4" />
           </Link>
           <button
             type="button"
-            className="rounded-lg border border-sky-200 bg-white p-2 text-slate-700 lg:hidden"
+            className="rounded-lg border border-cyan-400/30 bg-white/60 p-2 text-slate-800 backdrop-blur lg:hidden"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
           >
@@ -66,7 +66,7 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="border-t border-sky-100 bg-white lg:hidden"
+            className="holo-glass border-t border-cyan-400/20 lg:hidden"
           >
             <ul className="flex flex-col gap-3 px-6 py-5">
               {NAV_LINKS.map((link) => (
@@ -74,7 +74,7 @@ export function Navbar() {
                   <Link
                     href={link.href}
                     onClick={() => setMobileOpen(false)}
-                    className="block text-base font-medium text-slate-700"
+                    className="font-[family-name:var(--font-orbitron)] text-sm font-semibold tracking-wide text-slate-700 uppercase"
                   >
                     {link.label}
                   </Link>

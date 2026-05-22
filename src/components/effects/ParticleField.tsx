@@ -11,8 +11,14 @@ export function ParticleField() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const particles: { x: number; y: number; size: number; speed: number; opacity: number }[] =
-      [];
+    const particles: {
+      x: number;
+      y: number;
+      size: number;
+      speed: number;
+      opacity: number;
+      hue: number;
+    }[] = [];
     let animationId: number;
 
     const resize = () => {
@@ -22,14 +28,15 @@ export function ParticleField() {
 
     const init = () => {
       particles.length = 0;
-      const count = Math.floor((canvas.offsetWidth * canvas.offsetHeight) / 8000);
+      const count = Math.floor((canvas.offsetWidth * canvas.offsetHeight) / 5000);
       for (let i = 0; i < count; i++) {
         particles.push({
           x: Math.random() * canvas.offsetWidth,
           y: Math.random() * canvas.offsetHeight,
-          size: Math.random() * 2 + 0.5,
-          speed: Math.random() * 0.25 + 0.08,
-          opacity: Math.random() * 0.35 + 0.15,
+          size: Math.random() * 2.5 + 0.5,
+          speed: Math.random() * 0.35 + 0.1,
+          opacity: Math.random() * 0.5 + 0.2,
+          hue: Math.random() > 0.3 ? 190 : 260,
         });
       }
     };
@@ -47,7 +54,7 @@ export function ParticleField() {
         }
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(14, 165, 233, ${p.opacity})`;
+        ctx.fillStyle = `hsla(${p.hue}, 100%, 55%, ${p.opacity})`;
         ctx.fill();
       }
 
@@ -64,5 +71,5 @@ export function ParticleField() {
     return () => cancelAnimationFrame(animationId);
   }, []);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 h-full w-full opacity-50" aria-hidden />;
+  return <canvas ref={canvasRef} className="absolute inset-0 h-full w-full opacity-60" aria-hidden />;
 }

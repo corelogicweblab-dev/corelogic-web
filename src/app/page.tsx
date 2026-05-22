@@ -8,11 +8,12 @@ import { TechStack } from "@/components/sections/TechStack";
 import { WhyCoreLogic } from "@/components/sections/WhyCoreLogic";
 import { Contact } from "@/components/sections/Contact";
 import { LiveChat } from "@/components/ui/LiveChat";
+import { CursorGlow } from "@/components/effects/CursorGlow";
 
 function ContactFallback() {
   return (
     <section id="contact" className="section-padding flex min-h-[400px] items-center justify-center">
-      <div className="h-10 w-10 animate-spin rounded-full border-2 border-[#00F5FF]/20 border-t-[#00F5FF]" />
+      <div className="h-10 w-10 animate-spin rounded-full border-2 border-cyan-200 border-t-cyan-500" />
     </section>
   );
 }
@@ -33,6 +34,7 @@ export default function Home() {
       </main>
       <Footer />
       <LiveChat />
+      <CursorGlow />
     </>
   );
 }

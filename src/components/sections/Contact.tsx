@@ -61,19 +61,6 @@ function ContactForm({ project }: { project: string }) {
 
   return (
     <>
-      <div className="mb-6 rounded-2xl border border-sky-200 bg-gradient-to-r from-sky-50 to-indigo-50 px-5 py-4">
-        <div className="flex items-start gap-3">
-          <Mail className="mt-0.5 h-5 w-5 shrink-0 text-sky-600" />
-          <div>
-            <p className="text-sm font-semibold text-slate-800">Direct email delivery</p>
-            <p className="mt-1 text-sm text-slate-600">
-              Submit the form below — your message goes straight to{" "}
-              <strong className="text-sky-700">{SITE.email}</strong>. No email app required.
-            </p>
-          </div>
-        </div>
-      </div>
-
       <form onSubmit={handleSubmit} className="space-y-5">
         {formState.project && (
           <div className="rounded-xl border border-sky-200 bg-sky-50 px-4 py-2 text-sm font-medium text-sky-800">
@@ -146,7 +133,7 @@ function ContactForm({ project }: { project: string }) {
           ) : (
             <Send className="h-5 w-5" />
           )}
-          {loading ? "Sending to our team..." : success ? "Message Sent" : "Send Direct to Email"}
+          {loading ? "Sending..." : success ? "Message Sent" : "Send Message"}
         </button>
       </form>
 
@@ -182,7 +169,7 @@ export function Contact() {
       <div className="relative mx-auto max-w-[1600px]">
         <SectionHeading
           title="Get In Touch"
-          subtitle="Send your project inquiry — delivered directly to our inbox. We respond within 24 hours."
+          subtitle="Tell us about your project. We respond within 24 hours."
         />
 
         <div className="grid gap-10 lg:grid-cols-2 xl:grid-cols-3">
@@ -190,7 +177,7 @@ export function Contact() {
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="card-elevated rounded-3xl p-8 xl:col-span-1"
+            className="holo-glass hud-corners rounded-2xl p-8 xl:col-span-1"
           >
             <ContactForm key={project} project={project} />
           </motion.div>
@@ -207,7 +194,7 @@ export function Contact() {
                 href={item.href}
                 target={item.label === "Location" ? "_blank" : undefined}
                 rel={item.label === "Location" ? "noopener noreferrer" : undefined}
-                className="card-elevated flex items-center gap-4 rounded-2xl px-5 py-4"
+                className="card-future flex items-center gap-4 rounded-2xl px-5 py-4"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-sky-100 text-sky-600">
                   <item.icon className="h-6 w-6" />
@@ -224,7 +211,7 @@ export function Contact() {
             initial={{ opacity: 0, x: 24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="card-elevated overflow-hidden rounded-3xl"
+            className="holo-glass overflow-hidden rounded-2xl"
           >
             <GlobeScene />
           </motion.div>

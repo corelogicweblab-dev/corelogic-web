@@ -11,27 +11,27 @@ function projectInquiryHref(title: string) {
 }
 
 function ProjectVisual({ visual }: { visual: string }) {
+  const panel =
+    "rounded border border-cyan-400/30 bg-white/70 backdrop-blur-sm shadow-[0_0_12px_rgba(0,212,255,0.15)]";
+
   if (visual === "command") {
     return (
       <div className="flex h-full gap-2 p-4">
         {[0, 1, 2].map((i) => (
-          <div
-            key={i}
-            className="flex-1 rounded border border-[#00F5FF]/20 bg-[#050816]/90 p-2"
-          >
-            <div className="mb-2 h-2 w-8 rounded bg-[#00F5FF]/40" />
+          <div key={i} className={`flex-1 p-2 ${panel}`}>
+            <div className="mb-2 h-2 w-8 rounded bg-gradient-to-r from-cyan-400 to-indigo-400" />
             <div className="space-y-1">
               {["72%", "88%", "65%", "91%", "78%"].map((width, j) => (
                 <div
                   key={j}
-                  className="h-1 rounded-full bg-[#38BDF8]/30"
+                  className="h-1 rounded-full bg-gradient-to-r from-cyan-300/60 to-indigo-300/40"
                   style={{ width }}
                 />
               ))}
             </div>
             <div className="mt-3 grid grid-cols-3 gap-1">
               {Array.from({ length: 6 }).map((_, j) => (
-                <div key={j} className="aspect-square rounded bg-[#00F5FF]/10" />
+                <div key={j} className="aspect-square rounded bg-cyan-400/15 ring-1 ring-cyan-400/20" />
               ))}
             </div>
           </div>
@@ -46,19 +46,19 @@ function ProjectVisual({ visual }: { visual: string }) {
           {["KPI", "GIS", "Alerts"].map((t) => (
             <div
               key={t}
-              className="rounded border border-[#38BDF8]/30 px-2 py-1 text-[8px] text-[#38BDF8]"
+              className="rounded border border-cyan-400/40 bg-cyan-50/80 px-2 py-1 font-[family-name:var(--font-orbitron)] text-[8px] font-semibold tracking-wider text-cyan-700 uppercase"
             >
               {t}
             </div>
           ))}
         </div>
         <div className="flex flex-1 gap-2">
-          <div className="flex-1 rounded border border-[#00F5FF]/15 bg-[#050816]/80 p-2">
-            <div className="h-full rounded bg-gradient-to-br from-[#00F5FF]/10 to-transparent" />
+          <div className={`flex-1 p-2 ${panel}`}>
+            <div className="h-full rounded bg-gradient-to-br from-cyan-200/40 via-white/20 to-violet-200/30" />
           </div>
           <div className="w-1/3 space-y-2">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-8 rounded bg-[#7C3AED]/20" />
+              <div key={i} className="h-8 rounded bg-violet-400/20 ring-1 ring-violet-400/25" />
             ))}
           </div>
         </div>
@@ -68,13 +68,13 @@ function ProjectVisual({ visual }: { visual: string }) {
   if (visual === "ai") {
     return (
       <div className="relative flex h-full items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(124,58,237,0.3),transparent)]" />
-        <div className="relative h-32 w-32 rounded-full border-2 border-[#7C3AED]/50">
-          <div className="absolute inset-4 rounded-full border border-[#00F5FF]/40 animate-pulse" />
-          <div className="absolute inset-8 rounded-full bg-gradient-to-b from-[#00F5FF]/30 to-[#7C3AED]/30" />
-          <div className="absolute -inset-4 rounded-full border border-[#00F5FF]/10 animate-[spin_20s_linear_infinite]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.25),transparent)]" />
+        <div className="relative h-32 w-32 rounded-full border-2 border-violet-400/50 shadow-[0_0_30px_rgba(139,92,246,0.3)]">
+          <div className="absolute inset-4 rounded-full border border-cyan-400/50 animate-pulse" />
+          <div className="absolute inset-8 rounded-full bg-gradient-to-b from-cyan-300/40 to-violet-400/30" />
+          <div className="absolute -inset-4 rounded-full border border-cyan-400/20 animate-[spin_20s_linear_infinite]" />
         </div>
-        <div className="absolute bottom-4 left-4 right-4 rounded border border-[#00F5FF]/20 bg-[#050816]/80 p-2 text-[8px] text-[#94A3B8]">
+        <div className={`absolute bottom-4 left-4 right-4 p-2 text-[8px] text-slate-600 ${panel}`}>
           Processing natural language query...
         </div>
       </div>
@@ -83,20 +83,24 @@ function ProjectVisual({ visual }: { visual: string }) {
   if (visual === "dispatch") {
     return (
       <div className="grid h-full grid-cols-2 gap-2 p-4">
-        <div className="rounded border border-[#00FFB3]/20 bg-[#050816]/80 p-2">
-          <p className="text-[8px] text-[#00FFB3]">Active Units</p>
-          <p className="font-[family-name:var(--font-orbitron)] text-2xl text-[#00FFB3]">24</p>
+        <div className={panel}>
+          <p className="font-[family-name:var(--font-orbitron)] text-[8px] tracking-wider text-emerald-600 uppercase">
+            Active Units
+          </p>
+          <p className="font-[family-name:var(--font-orbitron)] text-2xl text-emerald-600">24</p>
         </div>
-        <div className="rounded border border-[#00F5FF]/20 bg-[#050816]/80 p-2">
-          <p className="text-[8px] text-[#00F5FF]">Incidents</p>
-          <p className="font-[family-name:var(--font-orbitron)] text-2xl text-[#00F5FF]">7</p>
+        <div className={panel}>
+          <p className="font-[family-name:var(--font-orbitron)] text-[8px] tracking-wider text-cyan-600 uppercase">
+            Incidents
+          </p>
+          <p className="font-[family-name:var(--font-orbitron)] text-2xl text-cyan-600">7</p>
         </div>
-        <div className="col-span-2 flex-1 rounded border border-[#38BDF8]/15 bg-[#050816]/60">
-          <div className="relative h-full">
+        <div className={`col-span-2 flex-1 ${panel}`}>
+          <div className="relative h-full min-h-[60px]">
             {Array.from({ length: 3 }).map((_, i) => (
               <div
                 key={i}
-                className="absolute h-2 w-2 rounded-full bg-[#00FFB3]"
+                className="absolute h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]"
                 style={{ left: `${20 + i * 25}%`, top: `${30 + i * 15}%` }}
               />
             ))}
@@ -109,18 +113,19 @@ function ProjectVisual({ visual }: { visual: string }) {
     <div className="flex h-full flex-col gap-2 p-4">
       <div className="grid grid-cols-4 gap-2">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-12 rounded border border-[#38BDF8]/20 bg-[#050816]/70" />
+          <div key={i} className={`h-12 ${panel}`} />
         ))}
       </div>
-      <div className="flex-1 rounded border border-[#7C3AED]/20 bg-gradient-to-r from-[#7C3AED]/10 to-[#00F5FF]/5" />
+      <div className="flex-1 rounded border border-violet-400/25 bg-gradient-to-r from-violet-200/30 to-cyan-100/40 shadow-[inset_0_0_20px_rgba(0,212,255,0.1)]" />
     </div>
   );
 }
 
 export function Showcase() {
   return (
-    <section id="solutions" className="relative section-padding overflow-hidden bg-white">
-      <div className="absolute inset-0 gradient-mesh-light opacity-80" />
+    <section id="solutions" className="relative section-padding overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-[#f0f9ff] to-white" />
+      <div className="absolute inset-0 gradient-mesh-future opacity-50" />
       <div className="relative mx-auto max-w-[1600px]">
         <SectionHeading
           title="Featured Solutions"
@@ -136,7 +141,7 @@ export function Showcase() {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1, duration: 0.6 }}
               whileHover={{ y: -6 }}
-              className="card-elevated group overflow-hidden rounded-3xl"
+              className="card-future group overflow-hidden rounded-2xl"
             >
               <div
                 className={`h-52 bg-gradient-to-br ${project.gradient} border-b border-[#00F5FF]/10`}
@@ -171,7 +176,7 @@ export function Showcase() {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
               whileHover={{ y: -4 }}
-              className="card-elevated flex overflow-hidden rounded-3xl"
+              className="card-future flex overflow-hidden rounded-2xl"
             >
               <div className={`w-2/5 min-h-[180px] bg-gradient-to-br ${project.gradient}`}>
                 <ProjectVisual visual={project.visual} />

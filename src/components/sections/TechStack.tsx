@@ -8,7 +8,8 @@ export function TechStack() {
   const categories = Object.entries(TECH_STACK);
 
   return (
-    <section id="technology" className="relative section-padding bg-sky-50/40">
+    <section id="technology" className="relative section-padding overflow-hidden">
+      <div className="absolute inset-0 grid-future opacity-25" />
       <div className="relative mx-auto max-w-[1600px]">
         <SectionHeading
           title="Technology Stack"
@@ -23,7 +24,7 @@ export function TechStack() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: catIndex * 0.08 }}
-              className="card-elevated rounded-2xl p-6"
+              className="card-future holo-glass rounded-2xl p-6"
             >
               <h3 className="font-[family-name:var(--font-orbitron)] text-xs font-bold tracking-wider text-sky-600 uppercase">
                 {category}

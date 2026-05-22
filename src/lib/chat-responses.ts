@@ -7,6 +7,8 @@ export interface ChatRule {
 }
 
 const EMAIL = SITE.email;
+const SEND_EMAIL_HINT =
+  "Open **Live Support** (bottom right) → **Send Email** tab to message our team.";
 
 export const CHAT_RULES: ChatRule[] = [
   {
@@ -14,15 +16,13 @@ export const CHAT_RULES: ChatRule[] = [
     match: /website|web\s*app|landing\s*page|company\s*site|build\s*a\s*site/i,
     reply: `**How to Build a Website with CoreLogic Web Lab**
 
-1. **Send inquiry** — Use the contact form on this site (messages go directly to ${EMAIL}).
+1. **Send inquiry** — ${SEND_EMAIL_HINT}
 2. **Discovery** — We define scope: corporate site, government portal, dashboard, or web app.
 3. **Design & Build** — Next.js, React, Tailwind — fast, secure, mobile-ready.
 4. **Launch** — Deploy on Netlify/AWS with ongoing support available.
 
 **Includes:** Responsive UI, APIs, auth, SEO, admin panels when needed.
-**Timeline:** Typically 2–8 weeks depending on scope.
-
-Use the **contact form** below to start — no email app required.`,
+**Timeline:** Typically 2–8 weeks depending on scope.`,
   },
   {
     priority: 95,
@@ -33,14 +33,14 @@ We build Flutter and native apps for government, enterprise, and field operation
 
 **Capabilities:** Citizen apps, monitoring, offline mode, API integration.
 
-Submit your idea via the **contact form** — delivered straight to ${EMAIL}.`,
+${SEND_EMAIL_HINT}`,
   },
   {
     priority: 90,
     match: /^(how|what)\??$|how\s*do\s*i\s*start|get\s*started|process|steps/i,
     reply: `**How to Get Started**
 
-1. Fill out the **contact form** on this page — sends directly to ${EMAIL}.
+1. ${SEND_EMAIL_HINT}
 2. Include: project type, features, timeline, and budget range (optional).
 3. We reply within **24 business hours** with next steps and a discovery call.
 
@@ -53,7 +53,7 @@ Submit your idea via the **contact form** — delivered straight to ${EMAIL}.`,
 
 Every project is custom-scoped. Factors: features, design, integrations, timeline.
 
-**Get a quote:** Submit the contact form with your requirements — we email you a tailored proposal.
+**Get a quote:** ${SEND_EMAIL_HINT} Include your requirements for a tailored proposal.
 
 No obligation on the first inquiry.`,
   },
@@ -75,7 +75,7 @@ No obligation on the first inquiry.`,
 
 **Featured:** DRRM Command Center, Smart LGU Platform, FOI AI Assistant.
 
-Ask about any service here or use the contact form.`,
+Ask about any service here or ${SEND_EMAIL_HINT.toLowerCase()}`,
   },
   {
     priority: 82,
@@ -84,7 +84,7 @@ Ask about any service here or use the contact form.`,
 
 Copilots, workflow automation, OpenAI/LangChain integrations, government-ready audit trails.
 
-Describe your use case in the **contact form** — sent directly to our engineering team.`,
+${SEND_EMAIL_HINT}`,
   },
   {
     priority: 80,
@@ -93,7 +93,7 @@ Describe your use case in the **contact form** — sent directly to our engineer
 
 Smart LGU portals, FOI AI Assistant, GIS, compliance-ready security.
 
-Use the contact form for procurement-ready discussions.`,
+${SEND_EMAIL_HINT}`,
   },
   {
     priority: 78,
@@ -102,7 +102,7 @@ Use the contact form for procurement-ready discussions.`,
 
 Command centers, dispatch, real-time monitoring, multi-agency coordination.
 
-Request a demo via the contact form (subject: DRRM).`,
+${SEND_EMAIL_HINT} Mention DRRM in your message for a demo request.`,
   },
   {
     priority: 65,
@@ -120,16 +120,16 @@ Database: PostgreSQL, MongoDB, Redis`,
     match: /contact|email|phone|call|reach|message/i,
     reply: `**Contact CoreLogic Web Lab**
 
-📧 **Email (via form):** ${EMAIL} — use the contact section (direct delivery)
+📧 **Email:** ${EMAIL} — ${SEND_EMAIL_HINT}
 📱 **Phone:** ${SITE.phone}
 📍 **Location:** ${SITE.location}
 
-The contact form sends straight to our inbox — no mail app needed.`,
+You can also use the contact form on this page.`,
   },
   {
     priority: 55,
     match: /thank|thanks/i,
-    reply: `You're welcome! Ask anything else here or send a project inquiry through the contact form.`,
+    reply: `You're welcome! Ask anything else here or send us a message via **Send Email** in Live Support.`,
   },
   {
     priority: 50,
@@ -143,14 +143,14 @@ I can help with:
 
 Try: *"How do I build a website?"* or *"What services do you offer?"*
 
-**Direct inquiry:** Use the contact form — messages go to ${EMAIL} instantly.`,
+**Project inquiries:** ${SEND_EMAIL_HINT}`,
   },
 ];
 
 export function getChatReply(message: string): string {
   const normalized = message.trim();
   if (!normalized) {
-    return `Ask a question — e.g. "How do I build a website?" or "What are your services?"\n\nProject inquiries: use the **contact form** (sent directly to ${EMAIL}).`;
+    return `Ask a question — e.g. "How do I build a website?" or "What are your services?"\n\nProject inquiries: ${SEND_EMAIL_HINT}`;
   }
 
   const matches = CHAT_RULES.filter((rule) => rule.match.test(normalized));
@@ -167,5 +167,5 @@ Try asking about:
 • **Pricing** — "How much does it cost?"
 • **Getting started** — "How do I get started?"
 
-**Fastest path:** Use the **contact form** on this site — your message is delivered directly to ${EMAIL}.`;
+**Project inquiries:** ${SEND_EMAIL_HINT}`;
 }
