@@ -13,10 +13,13 @@ git push origin main
 1. Go to [https://app.netlify.com](https://app.netlify.com)
 2. **Add new site** → **Import an existing project** → **GitHub**
 3. Select **corelogicweblab-dev/corelogic-web**
-4. Build settings (auto-detected from `netlify.toml`):
+4. Build settings (from `netlify.toml` — verify in **Site configuration → Build**):
+   - **Base directory:** *(leave empty — repo root)*
    - **Build command:** `npm run build`
+   - **Publish directory:** `.next` *(or leave empty — must NOT be `.` / same as base)*
    - **Node version:** 20
-   - **Plugin:** `@netlify/plugin-nextjs` (from repo)
+
+   > **If deploy fails:** “publish directory cannot be the same as base directory” → set Publish directory to `.next` or clear it completely. Do **not** use `.` as publish directory.
 
 5. Click **Deploy site**
 

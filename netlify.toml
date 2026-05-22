@@ -1,9 +1,13 @@
+# Next.js on Netlify — publish MUST differ from base directory (repo root).
+# If deploy fails with "publish directory cannot be the same as base directory",
+# clear "Publish directory" in Netlify UI (Site settings → Build) or leave it empty.
+
 [build]
   command = "npm run build"
+  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "20"
-  NPM_FLAGS = "--include=dev"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
@@ -11,7 +15,6 @@
 [context.production.environment]
   NODE_ENV = "production"
 
-# Security & caching headers (supplement next.config)
 [[headers]]
   for = "/*"
   [headers.values]
