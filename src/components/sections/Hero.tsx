@@ -44,12 +44,18 @@ export function Hero() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(".hero-reveal", {
-        y: 50,
+        y: 60,
         opacity: 0,
-        duration: 1,
-        stagger: 0.1,
-        ease: "power3.out",
-        delay: 0.2,
+        duration: 1.1,
+        stagger: 0.12,
+        ease: "power4.out",
+        delay: 0.15,
+      });
+      gsap.to(".hero-glow-line", {
+        scaleX: 1,
+        duration: 1.4,
+        ease: "power2.inOut",
+        delay: 0.8,
       });
     }, heroRef);
     return () => ctx.revert();
@@ -73,15 +79,19 @@ export function Hero() {
             {systemLabel}
           </motion.div>
 
-          <h1 className="hero-reveal text-glow font-[family-name:var(--font-space-grotesk)] text-4xl font-bold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl xl:text-7xl">
+          <h1 className="hero-reveal text-glow font-[family-name:var(--font-space-grotesk)] text-4xl font-bold leading-[1.05] tracking-tight text-[#e8f4ff] sm:text-5xl lg:text-6xl xl:text-7xl">
             Engineering Intelligent{" "}
             <span className="text-gradient">Digital Infrastructure</span>
           </h1>
 
-          <p className="hero-reveal mt-6 max-w-xl text-lg leading-relaxed text-slate-600">
+          <p className="hero-reveal mt-6 max-w-xl text-lg leading-relaxed text-slate-400">
             Enterprise software, AI systems, smart governance platforms, and cloud
             infrastructure — built for organizations that demand excellence.
           </p>
+
+          <div
+            className="hero-glow-line hero-reveal mt-8 h-px w-24 origin-left scale-x-0 bg-gradient-to-r from-cyan-400 to-violet-500"
+          />
 
           <div className="hero-reveal mt-10 flex flex-wrap gap-4">
             <Link href="#solutions" className="btn-primary group">
@@ -94,9 +104,14 @@ export function Hero() {
           </div>
 
           <div className="hero-reveal mt-14 grid grid-cols-3 gap-6 border-t border-cyan-400/20 pt-10">
-            {HERO_STATS.map((stat) => (
-              <div key={stat.label}>
-                <p className="font-[family-name:var(--font-orbitron)] text-2xl font-bold text-cyan-600 md:text-3xl drop-shadow-[0_0_12px_rgba(0,212,255,0.4)]">
+            {HERO_STATS.map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1 + i * 0.15 }}
+              >
+                <p className="font-[family-name:var(--font-orbitron)] text-2xl font-bold text-cyan-400 md:text-3xl drop-shadow-[0_0_16px_rgba(0,212,255,0.5)]">
                   <AnimatedCounter
                     value={stat.value}
                     suffix={stat.suffix}
@@ -104,34 +119,38 @@ export function Hero() {
                   />
                 </p>
                 <p className="mt-1 text-xs font-medium text-slate-500">{stat.label}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
 
         <div className="hero-reveal relative flex items-center justify-center lg:justify-end">
           <motion.div
-            animate={{ y: [0, -8, 0] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            animate={{ y: [0, -12, 0] }}
+            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
             className="holo-glass hud-corners relative w-full max-w-md rounded-2xl p-6 md:p-8"
           >
             <div className="mb-6 flex items-center justify-between border-b border-cyan-400/20 pb-4">
-              <span className="font-[family-name:var(--font-orbitron)] text-[10px] font-bold tracking-[0.2em] text-cyan-700 uppercase">
+              <span className="font-[family-name:var(--font-orbitron)] text-[10px] font-bold tracking-[0.2em] text-cyan-400 uppercase">
                 System HUD
               </span>
-              <div className="flex items-center gap-2 rounded border border-cyan-400/30 bg-cyan-400/10 px-2 py-1">
-                <Activity className="h-3.5 w-3.5 text-cyan-600" />
-                <span className="font-[family-name:var(--font-orbitron)] text-[10px] font-bold text-cyan-700 uppercase">
+              <motion.div
+                animate={{ boxShadow: ["0 0 8px rgba(0,212,255,0.3)", "0 0 20px rgba(0,212,255,0.6)", "0 0 8px rgba(0,212,255,0.3)"] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="flex items-center gap-2 rounded border border-cyan-400/40 bg-cyan-400/10 px-2 py-1"
+              >
+                <Activity className="h-3.5 w-3.5 text-cyan-400" />
+                <span className="font-[family-name:var(--font-orbitron)] text-[10px] font-bold text-cyan-400 uppercase">
                   Live
                 </span>
-              </div>
+              </motion.div>
             </div>
 
             <div className="mb-8 text-center">
               <p className="font-[family-name:var(--font-orbitron)] text-[10px] tracking-widest text-slate-500 uppercase">
                 Platform Uptime
               </p>
-              <p className="font-[family-name:var(--font-orbitron)] text-5xl font-bold text-cyan-600 drop-shadow-[0_0_20px_rgba(0,212,255,0.5)] md:text-6xl">
+              <p className="font-[family-name:var(--font-orbitron)] text-5xl font-bold text-cyan-400 drop-shadow-[0_0_24px_rgba(0,212,255,0.55)] md:text-6xl">
                 <AnimatedCounter value={health?.uptime ?? 99.99} suffix="%" decimals={2} />
               </p>
             </div>
@@ -140,17 +159,18 @@ export function Hero() {
               {HERO_INDICATORS.map((item, i) => (
                 <motion.div
                   key={item.label}
-                  initial={{ opacity: 0, x: 16 }}
+                  initial={{ opacity: 0, x: 24 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.6 + i * 0.12 }}
-                  className="flex items-center gap-3 rounded-lg border border-cyan-400/15 bg-white/50 px-4 py-3 backdrop-blur-sm"
+                  transition={{ delay: 0.7 + i * 0.15 }}
+                  whileHover={{ x: 4, borderColor: "rgba(0,212,255,0.4)" }}
+                  className="flex items-center gap-3 rounded-lg border border-cyan-400/15 bg-cyan-950/30 px-4 py-3 backdrop-blur-sm"
                 >
-                  {i === 0 && <Sparkles className="h-5 w-5 text-cyan-500 drop-shadow-[0_0_8px_rgba(0,212,255,0.6)]" />}
-                  {i === 1 && <Shield className="h-5 w-5 text-violet-500" />}
-                  {i === 2 && <Activity className="h-5 w-5 text-cyan-600" />}
+                  {i === 0 && <Sparkles className="h-5 w-5 text-cyan-400 drop-shadow-[0_0_8px_rgba(0,212,255,0.6)]" />}
+                  {i === 1 && <Shield className="h-5 w-5 text-violet-400" />}
+                  {i === 2 && <Activity className="h-5 w-5 text-cyan-500" />}
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-semibold text-slate-800">{item.label}</p>
-                    <p className="font-[family-name:var(--font-orbitron)] text-[10px] font-semibold text-cyan-600 uppercase capitalize">
+                    <p className="truncate text-sm font-semibold text-slate-200">{item.label}</p>
+                    <p className="font-[family-name:var(--font-orbitron)] text-[10px] font-semibold text-cyan-500 uppercase capitalize">
                       {health?.services
                         ? i === 0
                           ? health.services.ai
@@ -165,17 +185,17 @@ export function Hero() {
               ))}
             </div>
 
-            <div className="mt-6 h-24 overflow-hidden rounded-lg border border-cyan-400/20 bg-cyan-950/5">
+            <div className="mt-6 h-24 overflow-hidden rounded-lg border border-cyan-400/20 bg-black/30">
               <div className="flex h-full items-end gap-0.5 px-3 pb-2">
                 {BAR_HEIGHTS.map((h, i) => (
                   <motion.div
                     key={i}
-                    className="flex-1 rounded-t bg-gradient-to-t from-cyan-300 via-cyan-500 to-violet-400 shadow-[0_0_10px_rgba(0,212,255,0.4)]"
-                    animate={{ height: [`${h}%`, `${Math.max(25, h - 15)}%`] }}
+                    className="flex-1 rounded-t bg-gradient-to-t from-cyan-600 via-cyan-400 to-violet-400 shadow-[0_0_12px_rgba(0,212,255,0.5)]"
+                    animate={{ height: [`${h}%`, `${Math.max(20, h - 18)}%`, `${h}%`] }}
                     transition={{
-                      duration: 1.2 + (i % 5) * 0.2,
+                      duration: 1 + (i % 5) * 0.15,
                       repeat: Infinity,
-                      repeatType: "reverse",
+                      ease: "easeInOut",
                     }}
                   />
                 ))}
@@ -187,14 +207,18 @@ export function Hero() {
 
       <div className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2">
         <motion.div
-          animate={{ y: [0, 6, 0] }}
+          animate={{ y: [0, 8, 0] }}
           transition={{ repeat: Infinity, duration: 2 }}
-          className="flex flex-col items-center gap-2 text-slate-400"
+          className="flex flex-col items-center gap-2"
         >
-          <span className="font-[family-name:var(--font-orbitron)] text-[10px] tracking-[0.3em] text-cyan-600/70 uppercase">
+          <span className="font-[family-name:var(--font-orbitron)] text-[10px] tracking-[0.3em] text-cyan-500/80 uppercase">
             Scroll
           </span>
-          <div className="h-10 w-px bg-gradient-to-b from-cyan-400 to-transparent shadow-[0_0_8px_#00d4ff]" />
+          <motion.div
+            animate={{ scaleY: [1, 1.3, 1], opacity: [0.5, 1, 0.5] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            className="h-10 w-px bg-gradient-to-b from-cyan-400 to-transparent shadow-[0_0_8px_#00d4ff]"
+          />
         </motion.div>
       </div>
     </section>

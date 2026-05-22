@@ -10,7 +10,7 @@ export function ChatMessageContent({ text, light = false }: { text: string; ligh
           return (
             <strong
               key={i}
-              className={light ? "font-semibold text-slate-900" : "font-semibold"}
+              className={light ? "font-semibold text-slate-100" : "font-semibold"}
             >
               {part.slice(2, -2)}
             </strong>

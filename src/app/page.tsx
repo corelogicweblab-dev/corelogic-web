@@ -22,7 +22,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main>
+      <main className="relative overflow-hidden bg-[#0a0f1c]">
         <Hero />
         <Services />
         <Showcase />

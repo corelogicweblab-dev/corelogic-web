@@ -24,7 +24,7 @@ export function Logo({ showText = true, size = "md", className = "" }: LogoProps
         style={{
           width: dim.box,
           height: dim.box,
-          background: "linear-gradient(135deg, rgba(255,255,255,0.95), rgba(224,242,254,0.8))",
+          background: "linear-gradient(135deg, rgba(16,28,52,0.95), rgba(10,18,38,0.9))",
           border: "1px solid rgba(0, 212, 255, 0.4)",
           boxShadow: "0 0 20px rgba(0, 212, 255, 0.2)",
         }}
@@ -41,10 +41,10 @@ export function Logo({ showText = true, size = "md", className = "" }: LogoProps
       </div>
       {showText && (
         <div className="hidden min-w-0 sm:block">
-          <span className="font-[family-name:var(--font-space-grotesk)] text-sm font-bold text-slate-900">
+          <span className="font-[family-name:var(--font-space-grotesk)] text-sm font-bold text-slate-100">
             CoreLogic
           </span>
-          <span className="block font-[family-name:var(--font-orbitron)] text-[10px] font-bold tracking-[0.25em] text-cyan-600 uppercase">
+          <span className="block font-[family-name:var(--font-orbitron)] text-[10px] font-bold tracking-[0.25em] text-cyan-400 uppercase">
             {SITE.tagline}
           </span>
         </div>

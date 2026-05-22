@@ -13,8 +13,8 @@ const GlobeScene = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="flex h-[320px] items-center justify-center rounded-2xl border border-sky-100 bg-sky-50 md:h-[400px]">
-        <div className="h-10 w-10 animate-spin rounded-full border-2 border-sky-200 border-t-sky-500" />
+      <div className="flex h-[320px] items-center justify-center rounded-2xl border border-cyan-400/20 bg-slate-900/50 md:h-[400px]">
+        <div className="h-10 w-10 animate-spin rounded-full border-2 border-cyan-900 border-t-cyan-400" />
       </div>
     ),
   }
@@ -63,7 +63,7 @@ function ContactForm({ project }: { project: string }) {
     <>
       <form onSubmit={handleSubmit} className="space-y-5">
         {formState.project && (
-          <div className="rounded-xl border border-sky-200 bg-sky-50 px-4 py-2 text-sm font-medium text-sky-800">
+          <div className="rounded-xl border border-cyan-400/30 bg-cyan-950/40 px-4 py-2 text-sm font-medium text-cyan-300">
             Project: {formState.project}
           </div>
         )}
@@ -79,7 +79,7 @@ function ContactForm({ project }: { project: string }) {
             minLength={2}
             value={formState.name}
             onChange={(e) => setFormState((s) => ({ ...s, name: e.target.value }))}
-            className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-200"
+            className="w-full rounded-xl border border-cyan-400/20 bg-slate-900/60 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20"
             placeholder="John Doe"
           />
         </div>
@@ -94,7 +94,7 @@ function ContactForm({ project }: { project: string }) {
             required
             value={formState.email}
             onChange={(e) => setFormState((s) => ({ ...s, email: e.target.value }))}
-            className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-200"
+            className="w-full rounded-xl border border-cyan-400/20 bg-slate-900/60 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20"
             placeholder="you@company.com"
           />
         </div>
@@ -110,18 +110,18 @@ function ContactForm({ project }: { project: string }) {
             rows={4}
             value={formState.message}
             onChange={(e) => setFormState((s) => ({ ...s, message: e.target.value }))}
-            className="w-full resize-none rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-200"
+            className="w-full resize-none rounded-xl border border-cyan-400/20 bg-slate-900/60 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20"
             placeholder="Tell us about your project..."
           />
         </div>
 
         {error && (
-          <p className="rounded-lg bg-red-50 px-4 py-2 text-sm text-red-700" role="alert">
+          <p className="rounded-lg bg-red-950/50 px-4 py-2 text-sm text-red-400" role="alert">
             {error}
           </p>
         )}
         {success && (
-          <p className="flex items-start gap-2 rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-800" role="status">
+          <p className="flex items-start gap-2 rounded-lg bg-emerald-950/40 px-4 py-3 text-sm text-emerald-400" role="status">
             <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
             {success}
           </p>
@@ -140,14 +140,14 @@ function ContactForm({ project }: { project: string }) {
       <button
         type="button"
         onClick={() => document.dispatchEvent(new CustomEvent("open-live-chat"))}
-        className="mt-6 w-full rounded-2xl border border-sky-100 bg-sky-50/80 p-4 text-left transition hover:border-sky-300 hover:bg-sky-50"
+        className="mt-6 w-full rounded-2xl border border-cyan-400/20 bg-cyan-950/30 p-4 text-left transition hover:border-cyan-400/50 hover:bg-cyan-950/50"
       >
         <div className="mb-2 flex items-center gap-2">
-          <MessageSquare className="h-4 w-4 text-sky-600" />
-          <span className="text-sm font-semibold text-sky-800">Live Support</span>
-          <span className="ml-auto h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
+          <MessageSquare className="h-4 w-4 text-cyan-400" />
+          <span className="text-sm font-semibold text-cyan-300">Live Support</span>
+          <span className="ml-auto h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
         </div>
-        <p className="text-xs text-slate-600">Get instant answers in English — or call {SITE.phone}</p>
+        <p className="text-xs text-slate-400">Get instant answers in English — or call {SITE.phone}</p>
       </button>
     </>
   );
@@ -164,8 +164,8 @@ export function Contact() {
   ];
 
   return (
-    <section id="contact" className="relative section-padding bg-white">
-      <div className="absolute inset-0 bg-gradient-to-b from-sky-50/50 to-white" />
+    <section id="contact" className="section-dark relative section-padding">
+      <div className="absolute inset-0 gradient-mesh-future opacity-45" />
       <div className="relative mx-auto max-w-[1600px]">
         <SectionHeading
           title="Get In Touch"
@@ -174,8 +174,9 @@ export function Contact() {
 
         <div className="grid gap-10 lg:grid-cols-2 xl:grid-cols-3">
           <motion.div
-            initial={{ opacity: 0, x: -24 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: -40, scale: 0.96 }}
+            whileInView={{ opacity: 1, x: 0, scale: 1 }}
+            transition={{ duration: 0.65 }}
             viewport={{ once: true }}
             className="holo-glass hud-corners rounded-2xl p-8 xl:col-span-1"
           >
@@ -188,22 +189,27 @@ export function Contact() {
             viewport={{ once: true }}
             className="flex flex-col justify-center gap-4"
           >
-            {contactItems.map((item) => (
-              <a
+            {contactItems.map((item, i) => (
+              <motion.a
                 key={item.label}
                 href={item.href}
                 target={item.label === "Location" ? "_blank" : undefined}
                 rel={item.label === "Location" ? "noopener noreferrer" : undefined}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                whileHover={{ x: 6 }}
                 className="card-future flex items-center gap-4 rounded-2xl px-5 py-4"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-sky-100 text-sky-600">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-400/15 text-cyan-400">
                   <item.icon className="h-6 w-6" />
                 </div>
                 <div>
                   <p className="text-xs font-bold tracking-wide text-slate-500 uppercase">{item.label}</p>
-                  <p className="text-base font-semibold text-slate-900">{item.value}</p>
+                  <p className="text-base font-semibold text-slate-100">{item.value}</p>
                 </div>
-              </a>
+              </motion.a>
             ))}
           </motion.div>
 

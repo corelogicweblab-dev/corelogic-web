@@ -12,7 +12,7 @@ function projectInquiryHref(title: string) {
 
 function ProjectVisual({ visual }: { visual: string }) {
   const panel =
-    "rounded border border-cyan-400/30 bg-white/70 backdrop-blur-sm shadow-[0_0_12px_rgba(0,212,255,0.15)]";
+    "rounded border border-cyan-400/30 bg-slate-900/60 backdrop-blur-sm shadow-[0_0_12px_rgba(0,212,255,0.2)]";
 
   if (visual === "command") {
     return (
@@ -46,7 +46,7 @@ function ProjectVisual({ visual }: { visual: string }) {
           {["KPI", "GIS", "Alerts"].map((t) => (
             <div
               key={t}
-              className="rounded border border-cyan-400/40 bg-cyan-50/80 px-2 py-1 font-[family-name:var(--font-orbitron)] text-[8px] font-semibold tracking-wider text-cyan-700 uppercase"
+              className="rounded border border-cyan-400/40 bg-cyan-950/50 px-2 py-1 font-[family-name:var(--font-orbitron)] text-[8px] font-semibold tracking-wider text-cyan-400 uppercase"
             >
               {t}
             </div>
@@ -74,7 +74,7 @@ function ProjectVisual({ visual }: { visual: string }) {
           <div className="absolute inset-8 rounded-full bg-gradient-to-b from-cyan-300/40 to-violet-400/30" />
           <div className="absolute -inset-4 rounded-full border border-cyan-400/20 animate-[spin_20s_linear_infinite]" />
         </div>
-        <div className={`absolute bottom-4 left-4 right-4 p-2 text-[8px] text-slate-600 ${panel}`}>
+        <div className={`absolute bottom-4 left-4 right-4 p-2 text-[8px] text-slate-400 ${panel}`}>
           Processing natural language query...
         </div>
       </div>
@@ -123,9 +123,9 @@ function ProjectVisual({ visual }: { visual: string }) {
 
 export function Showcase() {
   return (
-    <section id="solutions" className="relative section-padding overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-[#f0f9ff] to-white" />
-      <div className="absolute inset-0 gradient-mesh-future opacity-50" />
+    <section id="solutions" className="section-dark relative section-padding overflow-hidden">
+      <div className="absolute inset-0 gradient-mesh-future opacity-55" />
+      <div className="absolute inset-0 grid-future opacity-30" />
       <div className="relative mx-auto max-w-[1600px]">
         <SectionHeading
           title="Featured Solutions"
@@ -136,11 +136,11 @@ export function Showcase() {
           {SHOWCASE_PROJECTS.slice(0, 3).map((project, index) => (
             <motion.article
               key={project.title}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 48, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1, duration: 0.6 }}
-              whileHover={{ y: -6 }}
+              transition={{ delay: index * 0.1, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+              whileHover={{ y: -10, scale: 1.02 }}
               className="card-future group overflow-hidden rounded-2xl"
             >
               <div
@@ -149,15 +149,15 @@ export function Showcase() {
                 <ProjectVisual visual={project.visual} />
               </div>
               <div className="p-6">
-                <h3 className="font-[family-name:var(--font-space-grotesk)] text-xl font-bold text-slate-900">
+                <h3 className="font-[family-name:var(--font-space-grotesk)] text-xl font-bold text-slate-100">
                   {project.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                <p className="mt-2 text-sm leading-relaxed text-slate-400">
                   {project.description}
                 </p>
                 <Link
                   href={projectInquiryHref(project.title)}
-                  className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-sky-600 hover:text-sky-700"
+                  className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-cyan-400 transition hover:text-cyan-300"
                 >
                   Request Demo
                   <ArrowRight className="h-4 w-4" />
@@ -171,24 +171,24 @@ export function Showcase() {
           {SHOWCASE_PROJECTS.slice(3).map((project, index) => (
             <motion.article
               key={project.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: index % 2 === 0 ? -32 : 32 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -4 }}
+              transition={{ delay: index * 0.12, duration: 0.6 }}
+              whileHover={{ y: -6, scale: 1.01 }}
               className="card-future flex overflow-hidden rounded-2xl"
             >
               <div className={`w-2/5 min-h-[180px] bg-gradient-to-br ${project.gradient}`}>
                 <ProjectVisual visual={project.visual} />
               </div>
               <div className="flex flex-1 flex-col justify-center p-6">
-                <h3 className="font-[family-name:var(--font-space-grotesk)] text-lg font-bold text-slate-900">
+                <h3 className="font-[family-name:var(--font-space-grotesk)] text-lg font-bold text-slate-100">
                   {project.title}
                 </h3>
-                <p className="mt-2 text-sm text-slate-600">{project.description}</p>
+                <p className="mt-2 text-sm text-slate-400">{project.description}</p>
                 <Link
                   href={projectInquiryHref(project.title)}
-                  className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-sky-600 hover:text-sky-700"
+                  className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-cyan-400 hover:text-cyan-300"
                 >
                   Request Demo
                   <ArrowRight className="h-4 w-4" />

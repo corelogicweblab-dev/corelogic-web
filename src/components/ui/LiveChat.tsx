@@ -160,7 +160,9 @@ export function LiveChat() {
       <motion.button
         type="button"
         onClick={() => setOpen(true)}
-        whileHover={{ scale: 1.08 }}
+        animate={{ scale: [1, 1.06, 1], boxShadow: ["0 0 30px rgba(0,212,255,0.5)", "0 0 45px rgba(0,212,255,0.7)", "0 0 30px rgba(0,212,255,0.5)"] }}
+        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        whileHover={{ scale: 1.12 }}
         className={`fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-2xl text-white transition-opacity ${
           open ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
@@ -198,14 +200,14 @@ export function LiveChat() {
               </button>
             </div>
 
-            <div className="flex border-b border-cyan-400/20 bg-white/50">
+            <div className="flex border-b border-cyan-400/20 bg-slate-900/50">
               <button
                 type="button"
                 onClick={() => setPanel("chat")}
                 className={`flex flex-1 items-center justify-center gap-1.5 py-2.5 font-[family-name:var(--font-orbitron)] text-[10px] font-bold tracking-wider uppercase transition ${
                   panel === "chat"
-                    ? "border-b-2 border-cyan-500 text-cyan-700 bg-white/80"
-                    : "text-slate-500 hover:text-cyan-600"
+                    ? "border-b-2 border-cyan-500 text-cyan-400 bg-slate-800/80"
+                    : "text-slate-500 hover:text-cyan-400"
                 }`}
               >
                 <MessageSquare className="h-3.5 w-3.5" />
@@ -216,8 +218,8 @@ export function LiveChat() {
                 onClick={() => setPanel("email")}
                 className={`flex flex-1 items-center justify-center gap-1.5 py-2.5 font-[family-name:var(--font-orbitron)] text-[10px] font-bold tracking-wider uppercase transition ${
                   panel === "email"
-                    ? "border-b-2 border-cyan-500 text-cyan-700 bg-white/80"
-                    : "text-slate-500 hover:text-cyan-600"
+                    ? "border-b-2 border-cyan-500 text-cyan-400 bg-slate-800/80"
+                    : "text-slate-500 hover:text-cyan-400"
                 }`}
               >
                 <Mail className="h-3.5 w-3.5" />
@@ -227,14 +229,14 @@ export function LiveChat() {
 
             {panel === "chat" ? (
               <>
-                <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto bg-white/40 p-4 backdrop-blur-sm">
+                <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto bg-slate-950/40 p-4 backdrop-blur-sm">
                   {messages.map((msg) => (
                     <div key={msg.id} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                       <div
                         className={`max-w-[90%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
                           msg.role === "user"
                             ? "text-white shadow-[0_0_16px_rgba(0,212,255,0.3)]"
-                            : "holo-glass border border-cyan-400/20 text-slate-700"
+                            : "holo-glass border border-cyan-400/20 text-slate-300"
                         }`}
                         style={
                           msg.role === "user"
@@ -255,7 +257,7 @@ export function LiveChat() {
 
                 {error && <p className="px-4 text-xs text-red-600" role="alert">{error}</p>}
 
-                <div className="border-t border-cyan-400/20 bg-white/60 p-3 backdrop-blur-md">
+                <div className="border-t border-cyan-400/20 bg-slate-900/60 p-3 backdrop-blur-md">
                   <div className="mb-2 flex flex-wrap gap-1.5">
                     {QUICK_PROMPTS.map((prompt) => (
                       <button
@@ -263,7 +265,7 @@ export function LiveChat() {
                         type="button"
                         disabled={loading}
                         onClick={() => sendText(prompt)}
-                        className="rounded-full border border-cyan-400/30 bg-cyan-50/80 px-2.5 py-1 font-[family-name:var(--font-orbitron)] text-[9px] font-semibold tracking-wide text-cyan-800 uppercase hover:bg-cyan-100 disabled:opacity-50"
+                        className="rounded-full border border-cyan-400/30 bg-cyan-950/60 px-2.5 py-1 font-[family-name:var(--font-orbitron)] text-[9px] font-semibold tracking-wide text-cyan-400 uppercase hover:bg-cyan-900/50 disabled:opacity-50"
                       >
                         {prompt}
                       </button>
@@ -281,7 +283,7 @@ export function LiveChat() {
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
                       placeholder="Ask about our services..."
-                      className="flex-1 rounded-xl border border-cyan-400/30 bg-white/80 px-3 py-2.5 text-sm text-slate-900 outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-200/50"
+                      className="flex-1 rounded-xl border border-cyan-400/30 bg-slate-900/80 px-3 py-2.5 text-sm text-slate-100 outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20"
                       disabled={loading}
                     />
                     <button
@@ -300,8 +302,8 @@ export function LiveChat() {
                 </div>
               </>
             ) : (
-              <form onSubmit={sendEmail} className="flex flex-1 flex-col overflow-y-auto bg-white/40 p-4 backdrop-blur-sm">
-                <p className="mb-4 text-sm text-slate-600">
+              <form onSubmit={sendEmail} className="flex flex-1 flex-col overflow-y-auto bg-slate-950/40 p-4 backdrop-blur-sm">
+                <p className="mb-4 text-sm text-slate-400">
                   Send your project inquiry to our team. We&apos;ll reply within 24 hours.
                 </p>
 
@@ -314,7 +316,7 @@ export function LiveChat() {
                   minLength={2}
                   value={emailForm.name}
                   onChange={(e) => setEmailForm((s) => ({ ...s, name: e.target.value }))}
-                  className="mb-3 rounded-xl border border-cyan-400/30 bg-white/90 px-3 py-2.5 text-sm text-slate-900 outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-200/50"
+                  className="mb-3 rounded-xl border border-cyan-400/30 bg-slate-900/80 px-3 py-2.5 text-sm text-slate-100 outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20"
                   placeholder="John Doe"
                   disabled={emailLoading}
                 />
@@ -327,7 +329,7 @@ export function LiveChat() {
                   required
                   value={emailForm.email}
                   onChange={(e) => setEmailForm((s) => ({ ...s, email: e.target.value }))}
-                  className="mb-3 rounded-xl border border-cyan-400/30 bg-white/90 px-3 py-2.5 text-sm text-slate-900 outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-200/50"
+                  className="mb-3 rounded-xl border border-cyan-400/30 bg-slate-900/80 px-3 py-2.5 text-sm text-slate-100 outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20"
                   placeholder="you@company.com"
                   disabled={emailLoading}
                 />
@@ -341,7 +343,7 @@ export function LiveChat() {
                   rows={5}
                   value={emailForm.message}
                   onChange={(e) => setEmailForm((s) => ({ ...s, message: e.target.value }))}
-                  className="mb-4 flex-1 resize-none rounded-xl border border-cyan-400/30 bg-white/90 px-3 py-2.5 text-sm text-slate-900 outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-200/50"
+                  className="mb-4 flex-1 resize-none rounded-xl border border-cyan-400/30 bg-slate-900/80 px-3 py-2.5 text-sm text-slate-100 outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20"
                   placeholder="Tell us about your project..."
                   disabled={emailLoading}
                 />

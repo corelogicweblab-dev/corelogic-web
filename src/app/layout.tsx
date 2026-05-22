@@ -25,7 +25,7 @@ const orbitron = Orbitron({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#f0f7ff",
+  themeColor: "#0a0f1c",
   width: "device-width",
   initialScale: 1,
 };
@@ -71,7 +71,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${inter.variable} ${spaceGrotesk.variable} ${orbitron.variable} min-h-screen bg-[#eef6ff] text-slate-900 antialiased`}
+        className={`${inter.variable} ${spaceGrotesk.variable} ${orbitron.variable} min-h-screen bg-[#0a0f1c] text-[#e8f4ff] antialiased`}
       >
         <Script
           id="json-ld-org"

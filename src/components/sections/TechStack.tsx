@@ -8,8 +8,8 @@ export function TechStack() {
   const categories = Object.entries(TECH_STACK);
 
   return (
-    <section id="technology" className="relative section-padding overflow-hidden">
-      <div className="absolute inset-0 grid-future opacity-25" />
+    <section id="technology" className="section-dark relative section-padding overflow-hidden">
+      <div className="absolute inset-0 grid-future opacity-35" />
       <div className="relative mx-auto max-w-[1600px]">
         <SectionHeading
           title="Technology Stack"
@@ -20,25 +20,37 @@ export function TechStack() {
           {categories.map(([category, items], catIndex) => (
             <motion.div
               key={category}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 36, rotateY: -6 }}
+              whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: catIndex * 0.08 }}
+              transition={{ delay: catIndex * 0.1, duration: 0.6 }}
+              whileHover={{ scale: 1.02 }}
               className="card-future holo-glass rounded-2xl p-6"
             >
-              <h3 className="font-[family-name:var(--font-orbitron)] text-xs font-bold tracking-wider text-sky-600 uppercase">
+              <h3 className="font-[family-name:var(--font-orbitron)] text-xs font-bold tracking-wider text-cyan-400 uppercase">
                 {category}
               </h3>
-              <ul className="mt-4 flex flex-wrap gap-2">
+              <motion.ul
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+                variants={{
+                  hidden: {},
+                  show: { transition: { staggerChildren: 0.04 } },
+                }}
+                className="mt-4 flex flex-wrap gap-2"
+              >
                 {items.map((tech) => (
-                  <li
+                  <motion.li
                     key={tech}
-                    className="rounded-lg border border-sky-100 bg-sky-50 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-sky-300 hover:bg-white hover:text-sky-700"
+                    variants={{ hidden: { opacity: 0, scale: 0.8 }, show: { opacity: 1, scale: 1 } }}
+                    whileHover={{ scale: 1.08, borderColor: "rgba(0,212,255,0.6)" }}
+                    className="rounded-lg border border-cyan-400/20 bg-cyan-950/40 px-3 py-1.5 text-sm font-medium text-slate-300 transition hover:bg-cyan-900/40 hover:text-cyan-300"
                   >
                     {tech}
-                  </li>
+                  </motion.li>
                 ))}
-              </ul>
+              </motion.ul>
             </motion.div>
           ))}
         </div>

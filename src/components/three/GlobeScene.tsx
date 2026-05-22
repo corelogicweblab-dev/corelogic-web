@@ -17,9 +17,9 @@ function Globe() {
       <Stars radius={60} depth={30} count={800} factor={2} fade speed={0.4} />
       <Sphere ref={meshRef} args={[1.8, 64, 64]}>
         <meshStandardMaterial
-          color="#e0f2fe"
-          emissive="#0ea5e9"
-          emissiveIntensity={0.2}
+          color="#7dd3fc"
+          emissive="#00d4ff"
+          emissiveIntensity={0.35}
           wireframe
           transparent
           opacity={0.9}
@@ -34,7 +34,7 @@ function Globe() {
 
 export function GlobeScene() {
   return (
-    <div className="h-[320px] w-full bg-gradient-to-br from-sky-50 to-indigo-50 md:h-[400px]">
+    <div className="h-[320px] w-full bg-gradient-to-br from-[#0a1020] via-[#0d1528] to-[#101828] md:h-[400px]">
       <Canvas camera={{ position: [0, 0, 5.5], fov: 45 }} gl={{ alpha: true }}>
         <ambientLight intensity={0.8} />
         <pointLight position={[10, 10, 10]} intensity={1} color="#0ea5e9" />
