@@ -1,19 +1,26 @@
-# Next.js on Netlify — publish MUST differ from base directory (repo root).
-# If deploy fails with "publish directory cannot be the same as base directory",
-# clear "Publish directory" in Netlify UI (Site settings → Build) or leave it empty.
+# CoreLogic Web Lab — Netlify production config
+# Docs: https://docs.netlify.com/frameworks/next-js/
 
 [build]
   command = "npm run build"
+  # Must differ from repo root — fixes plugin "same as base directory" error
   publish = ".next"
 
 [build.environment]
   NODE_VERSION = "20"
+  # Install devDependencies (eslint, Netlify plugin) during CI build
+  NPM_CONFIG_PRODUCTION = "false"
+  NEXT_TELEMETRY_DISABLED = "1"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
 [context.production.environment]
   NODE_ENV = "production"
+  NEXT_PUBLIC_SITE_URL = "https://corelogic-web.netlify.app"
+  NEXT_PUBLIC_CONTACT_EMAIL = "corelogicweblab@gmail.com"
+  NEXT_PUBLIC_CONTACT_PHONE = "0915 244 4480"
+  NEXT_PUBLIC_CONTACT_PHONE_TEL = "+639152444480"
 
 [[headers]]
   for = "/*"

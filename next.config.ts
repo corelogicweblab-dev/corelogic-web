@@ -10,6 +10,9 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
+  typescript: {
+    ignoreBuildErrors: false,
+  },
   images: {
     unoptimized: true,
   },
