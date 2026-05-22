@@ -123,7 +123,7 @@ function ProjectVisual({ visual }: { visual: string }) {
 
 export function Showcase() {
   return (
-    <section id="solutions" className="section-dark relative section-padding overflow-hidden">
+    <section id="solutions" className="section-dark section-below-fold relative section-padding overflow-hidden">
       <div className="absolute inset-0 gradient-mesh-future opacity-55" />
       <div className="absolute inset-0 grid-future opacity-30" />
       <div className="relative mx-auto max-w-[1600px]">

@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import gsap from "gsap";
 import { Activity, ArrowRight, Shield, Sparkles } from "lucide-react";
+import { deferNonCritical } from "@/lib/performance";
 import { CinematicBackground } from "@/components/effects/CinematicBackground";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { HERO_INDICATORS, HERO_STATS } from "@/lib/constants";
@@ -19,7 +20,6 @@ interface HealthData {
 }
 
 export function Hero() {
-  const heroRef = useRef<HTMLElement>(null);
   const [health, setHealth] = useState<HealthData | null>(null);
   const [systemLabel, setSystemLabel] = useState("All Systems Online");
 
@@ -33,67 +33,50 @@ export function Hero() {
           setSystemLabel(data.status === "online" ? "All Systems Online" : "Systems Check");
         }
       } catch {
-        setSystemLabel("Connecting...");
+        setSystemLabel("All Systems Online");
       }
     };
-    fetchHealth();
-    const interval = setInterval(fetchHealth, 30000);
-    return () => clearInterval(interval);
-  }, []);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(".hero-reveal", {
-        y: 60,
-        opacity: 0,
-        duration: 1.1,
-        stagger: 0.12,
-        ease: "power4.out",
-        delay: 0.15,
-      });
-      gsap.to(".hero-glow-line", {
-        scaleX: 1,
-        duration: 1.4,
-        ease: "power2.inOut",
-        delay: 0.8,
-      });
-    }, heroRef);
-    return () => ctx.revert();
+    const cancel = deferNonCritical(fetchHealth, 1500);
+    const interval = window.setInterval(fetchHealth, 60000);
+    return () => {
+      cancel?.();
+      clearInterval(interval);
+    };
   }, []);
 
   return (
-    <section ref={heroRef} className="relative flex min-h-screen items-center overflow-hidden pt-24">
+    <section className="relative flex min-h-screen items-center overflow-hidden pt-24">
       <CinematicBackground intense />
 
       <div className="section-padding relative z-10 mx-auto grid w-full max-w-[1600px] gap-12 lg:grid-cols-2 lg:gap-16 lg:py-28">
-        <div className="flex flex-col justify-center">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="hero-reveal badge-future"
-          >
+        <motion.div
+          initial={{ opacity: 0, y: 36 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="flex flex-col justify-center"
+        >
+          <div className="badge-future">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-500" />
             </span>
             {systemLabel}
-          </motion.div>
+          </div>
 
-          <h1 className="hero-reveal text-glow font-[family-name:var(--font-space-grotesk)] text-4xl font-bold leading-[1.05] tracking-tight text-[#e8f4ff] sm:text-5xl lg:text-6xl xl:text-7xl">
+          <h1 className="text-glow mt-0 font-[family-name:var(--font-space-grotesk)] text-4xl font-bold leading-[1.05] tracking-tight text-[#e8f4ff] sm:text-5xl lg:text-6xl xl:text-7xl">
             Engineering Intelligent{" "}
             <span className="text-gradient">Digital Infrastructure</span>
           </h1>
 
-          <p className="hero-reveal mt-6 max-w-xl text-lg leading-relaxed text-slate-400">
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-400">
             Enterprise software, AI systems, smart governance platforms, and cloud
             infrastructure — built for organizations that demand excellence.
           </p>
 
-          <div
-            className="hero-glow-line hero-reveal mt-8 h-px w-24 origin-left scale-x-0 bg-gradient-to-r from-cyan-400 to-violet-500"
-          />
+          <div className="mt-8 h-px w-24 bg-gradient-to-r from-cyan-400 to-violet-500" />
 
-          <div className="hero-reveal mt-10 flex flex-wrap gap-4">
+          <div className="mt-10 flex flex-wrap gap-4">
             <Link href="#solutions" className="btn-primary group">
               Explore Solutions
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -103,7 +86,7 @@ export function Hero() {
             </Link>
           </div>
 
-          <div className="hero-reveal mt-14 grid grid-cols-3 gap-6 border-t border-cyan-400/20 pt-10">
+          <div className="mt-14 grid grid-cols-3 gap-6 border-t border-cyan-400/20 pt-10">
             {HERO_STATS.map((stat, i) => (
               <motion.div
                 key={stat.label}
@@ -122,9 +105,14 @@ export function Hero() {
               </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
-        <div className="hero-reveal relative flex items-center justify-center lg:justify-end">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          className="relative flex items-center justify-center lg:justify-end"
+        >
           <motion.div
             animate={{ y: [0, -12, 0] }}
             transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
@@ -187,22 +175,22 @@ export function Hero() {
 
             <div className="mt-6 h-24 overflow-hidden rounded-lg border border-cyan-400/20 bg-black/30">
               <div className="flex h-full items-end gap-0.5 px-3 pb-2">
-                {BAR_HEIGHTS.map((h, i) => (
-                  <motion.div
+                {BAR_HEIGHTS.slice(0, 12).map((h, i) => (
+                  <div
                     key={i}
-                    className="flex-1 rounded-t bg-gradient-to-t from-cyan-600 via-cyan-400 to-violet-400 shadow-[0_0_12px_rgba(0,212,255,0.5)]"
-                    animate={{ height: [`${h}%`, `${Math.max(20, h - 18)}%`, `${h}%`] }}
-                    transition={{
-                      duration: 1 + (i % 5) * 0.15,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
+                    className="hud-bar flex-1 rounded-t bg-gradient-to-t from-cyan-600 via-cyan-400 to-violet-400 shadow-[0_0_12px_rgba(0,212,255,0.5)]"
+                    style={
+                      {
+                        "--bar-h": `${h}%`,
+                        animationDelay: `${i * 0.08}s`,
+                      } as CSSProperties
+                    }
                   />
                 ))}
               </div>
             </div>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
 
       <div className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2">

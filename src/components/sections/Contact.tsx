@@ -164,7 +164,7 @@ export function Contact() {
   ];
 
   return (
-    <section id="contact" className="section-dark relative section-padding">
+    <section id="contact" className="section-dark section-below-fold relative section-padding">
       <div className="absolute inset-0 gradient-mesh-future opacity-45" />
       <div className="relative mx-auto max-w-[1600px]">
         <SectionHeading

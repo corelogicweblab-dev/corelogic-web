@@ -6,7 +6,7 @@ import { WHY_FEATURES } from "@/lib/constants";
 
 export function WhyCoreLogic() {
   return (
-    <section id="about" className="section-dark relative section-padding overflow-hidden">
+    <section id="about" className="section-dark section-below-fold relative section-padding overflow-hidden">
       <div className="absolute inset-0 gradient-mesh-future opacity-50" />
       <div className="relative mx-auto max-w-[1600px]">
         <SectionHeading

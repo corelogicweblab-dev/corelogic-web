@@ -402,3 +402,112 @@ body {
 .animate-orbit {
   animation: orbit-spin 25s linear infinite;
 }
+
+/* CSS-only hero/background motion (GPU-friendly, no JS) */
+.bg-orb-cyan {
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.22) 0%, rgba(0, 212, 255, 0.04) 45%, transparent 70%);
+  animation: orb-drift-a 14s ease-in-out infinite;
+}
+
+.bg-orb-violet {
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.18) 0%, rgba(99, 102, 241, 0.05) 50%, transparent 70%);
+  animation: orb-drift-b 16s ease-in-out infinite;
+}
+
+.ring-orbit-slow {
+  box-shadow: 0 0 80px rgba(0, 212, 255, 0.1), inset 0 0 60px rgba(0, 212, 255, 0.05);
+  animation: orbit-spin 70s linear infinite;
+}
+
+.ring-orbit-reverse {
+  animation: orbit-spin 45s linear infinite reverse;
+}
+
+.data-tower {
+  animation: tower-pulse 2s ease-in-out infinite;
+}
+
+@keyframes orb-drift-a {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(40px, 24px) scale(1.08);
+  }
+}
+
+@keyframes orb-drift-b {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-36px, 0) scale(1.1);
+  }
+}
+
+.hud-bar {
+  height: var(--bar-h, 50%);
+  animation: bar-bounce 1.4s ease-in-out infinite;
+}
+
+@keyframes bar-bounce {
+  0%,
+  100% {
+    height: var(--bar-h, 50%);
+  }
+  50% {
+    height: calc(var(--bar-h, 50%) * 0.75);
+  }
+}
+
+@keyframes tower-pulse {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scaleY(0.9);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scaleY(1.05);
+  }
+}
+
+.section-below-fold {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
+}
+
+.chat-fab-pulse {
+  animation: fab-glow 2.5s ease-in-out infinite;
+}
+
+@keyframes fab-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 24px rgba(0, 212, 255, 0.45), 0 8px 20px rgba(99, 102, 241, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 36px rgba(0, 212, 255, 0.6), 0 8px 24px rgba(99, 102, 241, 0.35);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-orb-cyan,
+  .bg-orb-violet,
+  .ring-orbit-slow,
+  .ring-orbit-reverse,
+  .data-tower,
+  .grid-future,
+  .gradient-mesh-future,
+  .text-gradient,
+  .badge-future,
+  .btn-primary,
+  .btn-primary::after,
+  .card-future::before,
+  .chat-fab-pulse,
+  .hud-bar {
+    animation: none !important;
+  }
+}

@@ -4,6 +4,13 @@ import { appendJsonRecord } from "@/lib/storage";
 
 export const runtime = "nodejs";
 
+function logChat(sessionId: string, userMessage: string, reply: string) {
+  return Promise.all([
+    appendJsonRecord("chat-messages.json", { sessionId, message: userMessage, role: "user" }),
+    appendJsonRecord("chat-messages.json", { sessionId, message: reply, role: "assistant" }),
+  ]).catch((err) => console.error("[chat] log failed", err));
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -17,24 +24,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Message is too long." }, { status: 400 });
     }
 
-    await appendJsonRecord("chat-messages.json", {
-      sessionId,
-      message,
-      role: "user",
-    });
-
     const reply = getChatReply(message);
+    const timestamp = new Date().toISOString();
 
-    await appendJsonRecord("chat-messages.json", {
-      sessionId,
-      message: reply,
-      role: "assistant",
-    });
+    void logChat(sessionId, message, reply);
 
     return NextResponse.json({
       success: true,
       reply,
-      timestamp: new Date().toISOString(),
+      timestamp,
     });
   } catch (error) {
     console.error("[chat]", error);

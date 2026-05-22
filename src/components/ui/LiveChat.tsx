@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Mail, MessageSquare, Send, X } from "lucide-react";
 import { ChatMessageContent } from "@/components/ui/ChatMessageContent";
+import { getChatReply } from "@/lib/chat-responses";
 import { SITE } from "@/lib/site-config";
 
 interface ChatMessage {
@@ -24,14 +25,14 @@ const QUICK_PROMPTS = [
 
 const WELCOME_MESSAGE = `Hello! Welcome to **CoreLogic Web Lab** Live Support.
 
-I can help with:
-• Website & web app development
-• Mobile apps, AI, and government systems
-• Pricing, process, and our tech stack
+Ask anything — you'll get **instant, detailed answers** about:
+• Websites, web apps, and mobile development
+• AI, automation, and government/LGU systems
+• Pricing, timelines, tech stack, and how to start
 
-**Try:** "How do I build a website?" or "What services do you offer?"
+**Try:** "How do I build a website?" · "What services do you offer?" · "How much does it cost?"
 
-**Send a project inquiry:** Switch to **Send Email** above — name, email, and message.
+**Talk to our team:** **Send Email** tab above, or the Contact section.
 **Phone:** ${SITE.phone}`;
 
 function getSessionId() {
@@ -98,37 +99,38 @@ export function LiveChat() {
     const trimmed = text.trim();
     if (!trimmed || loading) return;
 
+    const userTimestamp = new Date().toISOString();
     setMessages((prev) => [
       ...prev,
-      { id: crypto.randomUUID(), role: "user", text: trimmed, timestamp: new Date().toISOString() },
+      { id: crypto.randomUUID(), role: "user", text: trimmed, timestamp: userTimestamp },
     ]);
     setInput("");
     setLoading(true);
     setError(null);
 
-    try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: trimmed, sessionId: getSessionId() }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to send");
+    const reply = getChatReply(trimmed);
+    const assistantTimestamp = new Date().toISOString();
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: crypto.randomUUID(),
-          role: "assistant",
-          text: data.reply,
-          timestamp: data.timestamp,
-        },
-      ]);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Message failed to send");
-    } finally {
-      setLoading(false);
-    }
+    await new Promise((r) => setTimeout(r, 90));
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        text: reply,
+        timestamp: assistantTimestamp,
+      },
+    ]);
+    setLoading(false);
+
+    fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: trimmed, sessionId: getSessionId() }),
+    }).catch(() => {
+      /* logging only — reply already shown locally */
+    });
   };
 
   const sendEmail = async (e: React.FormEvent) => {
@@ -160,10 +162,8 @@ export function LiveChat() {
       <motion.button
         type="button"
         onClick={() => setOpen(true)}
-        animate={{ scale: [1, 1.06, 1], boxShadow: ["0 0 30px rgba(0,212,255,0.5)", "0 0 45px rgba(0,212,255,0.7)", "0 0 30px rgba(0,212,255,0.5)"] }}
-        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-        whileHover={{ scale: 1.12 }}
-        className={`fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-2xl text-white transition-opacity ${
+        whileHover={{ scale: 1.1 }}
+        className={`chat-fab-pulse fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-2xl text-white transition-opacity ${
           open ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
         style={{
