@@ -22,14 +22,14 @@ export function ParticleField() {
 
     const init = () => {
       particles.length = 0;
-      const count = Math.floor((canvas.offsetWidth * canvas.offsetHeight) / 6000);
+      const count = Math.floor((canvas.offsetWidth * canvas.offsetHeight) / 8000);
       for (let i = 0; i < count; i++) {
         particles.push({
           x: Math.random() * canvas.offsetWidth,
           y: Math.random() * canvas.offsetHeight,
           size: Math.random() * 2 + 0.5,
-          speed: Math.random() * 0.3 + 0.1,
-          opacity: Math.random() * 0.5 + 0.2,
+          speed: Math.random() * 0.25 + 0.08,
+          opacity: Math.random() * 0.35 + 0.15,
         });
       }
     };
@@ -47,7 +47,7 @@ export function ParticleField() {
         }
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(0, 245, 255, ${p.opacity})`;
+        ctx.fillStyle = `rgba(14, 165, 233, ${p.opacity})`;
         ctx.fill();
       }
 
@@ -57,7 +57,6 @@ export function ParticleField() {
     resize();
     init();
     draw();
-
     window.addEventListener("resize", () => {
       resize();
       init();
@@ -65,11 +64,5 @@ export function ParticleField() {
     return () => cancelAnimationFrame(animationId);
   }, []);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 h-full w-full opacity-55"
-      aria-hidden
-    />
-  );
+  return <canvas ref={canvasRef} className="absolute inset-0 h-full w-full opacity-50" aria-hidden />;
 }

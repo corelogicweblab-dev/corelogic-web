@@ -1,8 +1,8 @@
-/** Production defaults — override via env on Netlify if needed */
+/** Production defaults */
 const PRODUCTION = {
   email: "corelogicweblab@gmail.com",
-  phone: "0915 244 4480",
-  phoneTel: "+639152444480",
+  phone: "0915 244 4444",
+  phoneTel: "+639152444444",
   location: "Philippines",
   siteUrl: "https://corelogic-web.netlify.app",
 } as const;
@@ -18,6 +18,5 @@ export const SITE = {
   logoSrc: "/corelogic.png",
 } as const;
 
-export const MAILTO_LINK = `mailto:${SITE.email}?subject=${encodeURIComponent("Project Inquiry — CoreLogic Web Lab")}`;
-
+export const CONTACT_HREF = "#contact";
 export const TEL_LINK = `tel:${SITE.phoneTel}`;

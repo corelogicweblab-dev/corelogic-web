@@ -2,13 +2,6 @@
 
 import { useEffect, useRef } from "react";
 
-interface Node {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-}
-
 export function NeuralBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -19,14 +12,14 @@ export function NeuralBackground() {
     if (!ctx) return;
 
     let animationId: number;
-    const nodes: Node[] = [];
-    const nodeCount = 55;
-    const connectionDistance = 140;
+    const nodes: { x: number; y: number; vx: number; vy: number }[] = [];
+    const nodeCount = 45;
+    const connectionDistance = 130;
 
     const resize = () => {
       canvas.width = canvas.offsetWidth * window.devicePixelRatio;
       canvas.height = canvas.offsetHeight * window.devicePixelRatio;
-      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      ctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
     };
 
     const initNodes = () => {
@@ -37,8 +30,8 @@ export function NeuralBackground() {
         nodes.push({
           x: Math.random() * w,
           y: Math.random() * h,
-          vx: (Math.random() - 0.5) * 0.4,
-          vy: (Math.random() - 0.5) * 0.4,
+          vx: (Math.random() - 0.5) * 0.35,
+          vy: (Math.random() - 0.5) * 0.35,
         });
       }
     };
@@ -56,7 +49,7 @@ export function NeuralBackground() {
 
         ctx.beginPath();
         ctx.arc(node.x, node.y, 1.5, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(0, 245, 255, 0.6)";
+        ctx.fillStyle = "rgba(14, 165, 233, 0.5)";
         ctx.fill();
       }
 
@@ -66,12 +59,12 @@ export function NeuralBackground() {
           const dy = nodes[i].y - nodes[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < connectionDistance) {
-            const alpha = (1 - dist / connectionDistance) * 0.25;
+            const alpha = (1 - dist / connectionDistance) * 0.2;
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.strokeStyle = `rgba(56, 189, 248, ${alpha})`;
-            ctx.lineWidth = 0.5;
+            ctx.strokeStyle = `rgba(99, 102, 241, ${alpha})`;
+            ctx.lineWidth = 0.6;
             ctx.stroke();
           }
         }
@@ -83,23 +76,12 @@ export function NeuralBackground() {
     resize();
     initNodes();
     draw();
-
-    const onResize = () => {
+    window.addEventListener("resize", () => {
       resize();
       initNodes();
-    };
-    window.addEventListener("resize", onResize);
-    return () => {
-      cancelAnimationFrame(animationId);
-      window.removeEventListener("resize", onResize);
-    };
+    });
+    return () => cancelAnimationFrame(animationId);
   }, []);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 h-full w-full opacity-60"
-      aria-hidden
-    />
-  );
+  return <canvas ref={canvasRef} className="absolute inset-0 h-full w-full opacity-40" aria-hidden />;
 }

@@ -20,7 +20,7 @@ export function Logo({ showText = true, size = "md", className = "" }: LogoProps
   return (
     <Link href="/" className={`group flex items-center gap-3 ${className}`}>
       <div
-        className="relative flex shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#00F5FF]/30 bg-[#0B1120] shadow-[0_0_20px_rgba(0,245,255,0.15)] transition-all group-hover:border-[#00F5FF]/60 group-hover:shadow-[0_0_32px_rgba(0,245,255,0.25)]"
+        className="relative flex shrink-0 items-center justify-center overflow-hidden rounded-xl border border-sky-200 bg-white shadow-md shadow-sky-500/15 transition-all group-hover:border-sky-400 group-hover:shadow-lg group-hover:shadow-sky-500/25"
         style={{ width: dim.box, height: dim.box }}
       >
         <Image
@@ -35,10 +35,10 @@ export function Logo({ showText = true, size = "md", className = "" }: LogoProps
       </div>
       {showText && (
         <div className="hidden min-w-0 sm:block">
-          <span className="font-[family-name:var(--font-space-grotesk)] text-sm font-semibold tracking-wide text-[#F8FAFC]">
+          <span className="font-[family-name:var(--font-space-grotesk)] text-sm font-bold text-slate-900">
             CoreLogic
           </span>
-          <span className="block font-[family-name:var(--font-orbitron)] text-[10px] tracking-[0.25em] text-[#00F5FF] uppercase">
+          <span className="block font-[family-name:var(--font-orbitron)] text-[10px] font-semibold tracking-[0.2em] text-sky-600 uppercase">
             {SITE.tagline}
           </span>
         </div>

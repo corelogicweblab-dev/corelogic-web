@@ -55,6 +55,33 @@ async function sendViaResend(
   return res.ok;
 }
 
+/** Sends directly to inbox — no mailto / local email app */
+async function sendViaFormSubmit(
+  payload: ContactBody & { name: string; email: string; message: string }
+) {
+  const res = await fetch(
+    `https://formsubmit.co/ajax/${encodeURIComponent(SITE.email)}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        name: payload.name,
+        email: payload.email,
+        message: payload.message,
+        project: payload.project ?? "",
+        _subject: `CoreLogic Web Lab — ${payload.project || "New Project Inquiry"} (${payload.name})`,
+        _template: "table",
+        _captcha: "false",
+      }),
+    }
+  );
+
+  return res.ok;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = (await request.json()) as ContactBody;
@@ -72,34 +99,38 @@ export async function POST(request: NextRequest) {
     if (!message || message.length < 10) {
       return NextResponse.json(
         { error: "Message must be at least 10 characters." },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
     const record = { name, email, message, project: project || null };
     await appendJsonRecord("inquiries.json", record);
 
-    const emailed = await sendViaResend({
-      name,
-      email,
-      message,
-      project: project || undefined,
-    });
+    const payload = { name, email, message, project: project || undefined };
+    const emailed =
+      (await sendViaResend(payload)) || (await sendViaFormSubmit(payload));
+
+    if (!emailed) {
+      return NextResponse.json(
+        {
+          error:
+            "Could not deliver your message right now. Please try again in a moment or call us.",
+        },
+        { status: 503 }
+      );
+    }
 
     return NextResponse.json({
       success: true,
-      message: emailed
-        ? "Your message was sent successfully. We'll respond within 24 hours."
-        : `Your inquiry was received. For immediate contact, email ${SITE.email} or call ${SITE.phone}.`,
-      emailed,
+      message:
+        "Your message was sent directly to our team at corelogicweblab@gmail.com. We'll respond within 24 hours.",
+      emailed: true,
     });
   } catch (error) {
     console.error("[contact]", error);
     return NextResponse.json(
-      {
-        error: `Unable to submit right now. Please email ${SITE.email} or call ${SITE.phone}.`,
-      },
-      { status: 500 },
+      { error: "Unable to submit right now. Please try again shortly." },
+      { status: 500 }
     );
   }
 }

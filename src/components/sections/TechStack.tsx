@@ -8,41 +8,34 @@ export function TechStack() {
   const categories = Object.entries(TECH_STACK);
 
   return (
-    <section id="technology" className="relative section-padding">
-      <div className="absolute inset-0 bg-[#0B1120]/40" />
-      <div className="absolute inset-0 grid-overlay opacity-30" />
+    <section id="technology" className="relative section-padding bg-sky-50/40">
       <div className="relative mx-auto max-w-[1600px]">
         <SectionHeading
           title="Technology Stack"
-          subtitle="Production-grade tools powering our AI infrastructure and enterprise delivery pipeline."
+          subtitle="Production-grade tools powering our delivery pipeline."
         />
 
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {categories.map(([category, items], catIndex) => (
             <motion.div
               key={category}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: catIndex * 0.08 }}
-              className="glass-panel glow-border rounded-2xl p-6"
+              className="card-elevated rounded-2xl p-6"
             >
-              <h3 className="font-[family-name:var(--font-orbitron)] text-xs tracking-[0.2em] text-[#00F5FF] uppercase">
+              <h3 className="font-[family-name:var(--font-orbitron)] text-xs font-bold tracking-wider text-sky-600 uppercase">
                 {category}
               </h3>
-              <ul className="mt-5 flex flex-wrap gap-3">
-                {items.map((tech, i) => (
-                  <motion.li
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {items.map((tech) => (
+                  <li
                     key={tech}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: catIndex * 0.05 + i * 0.03 }}
-                    whileHover={{ scale: 1.05 }}
-                    className="rounded-lg border border-[#00F5FF]/15 bg-[#050816]/60 px-4 py-2 text-sm font-medium text-[#F8FAFC] transition-colors hover:border-[#00F5FF]/40 hover:bg-[#00F5FF]/10 hover:text-[#00F5FF]"
+                    className="rounded-lg border border-sky-100 bg-sky-50 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-sky-300 hover:bg-white hover:text-sky-700"
                   >
                     {tech}
-                  </motion.li>
+                  </li>
                 ))}
               </ul>
             </motion.div>

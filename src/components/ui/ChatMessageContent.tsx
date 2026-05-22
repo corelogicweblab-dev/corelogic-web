@@ -1,7 +1,6 @@
 "use client";
 
-/** Renders chat text with **bold** and line breaks */
-export function ChatMessageContent({ text }: { text: string }) {
+export function ChatMessageContent({ text, light = false }: { text: string; light?: boolean }) {
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
 
   return (
@@ -9,7 +8,10 @@ export function ChatMessageContent({ text }: { text: string }) {
       {parts.map((part, i) => {
         if (part.startsWith("**") && part.endsWith("**")) {
           return (
-            <strong key={i} className="font-semibold text-[#F8FAFC]">
+            <strong
+              key={i}
+              className={light ? "font-semibold text-slate-900" : "font-semibold"}
+            >
               {part.slice(2, -2)}
             </strong>
           );

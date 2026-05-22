@@ -19,8 +19,8 @@
   NODE_ENV = "production"
   NEXT_PUBLIC_SITE_URL = "https://corelogic-web.netlify.app"
   NEXT_PUBLIC_CONTACT_EMAIL = "corelogicweblab@gmail.com"
-  NEXT_PUBLIC_CONTACT_PHONE = "0915 244 4480"
-  NEXT_PUBLIC_CONTACT_PHONE_TEL = "+639152444480"
+  NEXT_PUBLIC_CONTACT_PHONE = "0915 244 4444"
+  NEXT_PUBLIC_CONTACT_PHONE_TEL = "+639152444444"
 
 [[headers]]
   for = "/*"

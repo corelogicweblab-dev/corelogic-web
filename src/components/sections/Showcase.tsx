@@ -119,8 +119,8 @@ function ProjectVisual({ visual }: { visual: string }) {
 
 export function Showcase() {
   return (
-    <section id="solutions" className="relative section-padding overflow-hidden">
-      <div className="absolute inset-0 gradient-mesh opacity-60" />
+    <section id="solutions" className="relative section-padding overflow-hidden bg-white">
+      <div className="absolute inset-0 gradient-mesh-light opacity-80" />
       <div className="relative mx-auto max-w-[1600px]">
         <SectionHeading
           title="Featured Solutions"
@@ -136,7 +136,7 @@ export function Showcase() {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1, duration: 0.6 }}
               whileHover={{ y: -6 }}
-              className="group overflow-hidden rounded-2xl border border-[#00F5FF]/15 bg-[#0B1120]/70 backdrop-blur-sm transition-all hover:border-[#00F5FF]/35 hover:shadow-[0_20px_60px_rgba(0,245,255,0.1)]"
+              className="card-elevated group overflow-hidden rounded-3xl"
             >
               <div
                 className={`h-52 bg-gradient-to-br ${project.gradient} border-b border-[#00F5FF]/10`}
@@ -144,15 +144,15 @@ export function Showcase() {
                 <ProjectVisual visual={project.visual} />
               </div>
               <div className="p-6">
-                <h3 className="font-[family-name:var(--font-space-grotesk)] text-xl font-semibold text-[#F8FAFC]">
+                <h3 className="font-[family-name:var(--font-space-grotesk)] text-xl font-bold text-slate-900">
                   {project.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-[#94A3B8]">
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">
                   {project.description}
                 </p>
                 <Link
                   href={projectInquiryHref(project.title)}
-                  className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-[#00F5FF] transition-colors hover:text-[#38BDF8]"
+                  className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-sky-600 hover:text-sky-700"
                 >
                   Request Demo
                   <ArrowRight className="h-4 w-4" />
@@ -171,19 +171,19 @@ export function Showcase() {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
               whileHover={{ y: -4 }}
-              className="flex overflow-hidden rounded-2xl border border-[#00F5FF]/15 bg-[#0B1120]/70"
+              className="card-elevated flex overflow-hidden rounded-3xl"
             >
               <div className={`w-2/5 min-h-[180px] bg-gradient-to-br ${project.gradient}`}>
                 <ProjectVisual visual={project.visual} />
               </div>
               <div className="flex flex-1 flex-col justify-center p-6">
-                <h3 className="font-[family-name:var(--font-space-grotesk)] text-lg font-semibold text-[#F8FAFC]">
+                <h3 className="font-[family-name:var(--font-space-grotesk)] text-lg font-bold text-slate-900">
                   {project.title}
                 </h3>
-                <p className="mt-2 text-sm text-[#94A3B8]">{project.description}</p>
+                <p className="mt-2 text-sm text-slate-600">{project.description}</p>
                 <Link
                   href={projectInquiryHref(project.title)}
-                  className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-[#00F5FF] hover:text-[#38BDF8]"
+                  className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-sky-600 hover:text-sky-700"
                 >
                   Request Demo
                   <ArrowRight className="h-4 w-4" />
