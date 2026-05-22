@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { appendJsonRecord } from "@/lib/storage";
 import { SITE } from "@/lib/site-config";
 
+export const runtime = "nodejs";
+
 interface ContactBody {
   name?: string;
   email?: string;
@@ -13,7 +15,17 @@ function isValidEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-async function sendViaResend(payload: ContactBody & { name: string; email: string; message: string }) {
+function escapeHtml(text: string) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+async function sendViaResend(
+  payload: ContactBody & { name: string; email: string; message: string }
+) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return false;
 
@@ -30,11 +42,12 @@ async function sendViaResend(payload: ContactBody & { name: string; email: strin
       subject: `New inquiry${payload.project ? `: ${payload.project}` : ""} — ${payload.name}`,
       html: `
         <h2>New contact form submission</h2>
-        <p><strong>Name:</strong> ${payload.name}</p>
-        <p><strong>Email:</strong> ${payload.email}</p>
-        ${payload.project ? `<p><strong>Project:</strong> ${payload.project}</p>` : ""}
+        <p><strong>Name:</strong> ${escapeHtml(payload.name)}</p>
+        <p><strong>Email:</strong> ${escapeHtml(payload.email)}</p>
+        <p><strong>Phone:</strong> ${escapeHtml(SITE.phone)}</p>
+        ${payload.project ? `<p><strong>Project:</strong> ${escapeHtml(payload.project)}</p>` : ""}
         <p><strong>Message:</strong></p>
-        <p>${payload.message.replace(/\n/g, "<br>")}</p>
+        <p>${escapeHtml(payload.message).replace(/\n/g, "<br>")}</p>
       `,
     }),
   });
@@ -59,7 +72,7 @@ export async function POST(request: NextRequest) {
     if (!message || message.length < 10) {
       return NextResponse.json(
         { error: "Message must be at least 10 characters." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -76,14 +89,17 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       message: emailed
-        ? "Your message was sent. We'll respond within 24 hours."
-        : "Your inquiry was received. Our team will contact you within 24 hours.",
+        ? "Your message was sent successfully. We'll respond within 24 hours."
+        : `Your inquiry was received. For immediate contact, email ${SITE.email} or call ${SITE.phone}.`,
       emailed,
     });
-  } catch {
+  } catch (error) {
+    console.error("[contact]", error);
     return NextResponse.json(
-      { error: "Unable to submit your message. Please try again." },
-      { status: 500 }
+      {
+        error: `Unable to submit right now. Please email ${SITE.email} or call ${SITE.phone}.`,
+      },
+      { status: 500 },
     );
   }
 }

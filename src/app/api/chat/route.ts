@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getChatReply } from "@/lib/chat-responses";
 import { appendJsonRecord } from "@/lib/storage";
 
+export const runtime = "nodejs";
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -34,7 +36,8 @@ export async function POST(request: NextRequest) {
       reply,
       timestamp: new Date().toISOString(),
     });
-  } catch {
+  } catch (error) {
+    console.error("[chat]", error);
     return NextResponse.json({ error: "Chat is temporarily unavailable." }, { status: 500 });
   }
 }

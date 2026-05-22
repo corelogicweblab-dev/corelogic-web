@@ -1,26 +1,41 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import { motion, useSpring } from "framer-motion";
 
+function subscribePointer(callback: () => void) {
+  const mq = window.matchMedia("(pointer: fine)");
+  mq.addEventListener("change", callback);
+  return () => mq.removeEventListener("change", callback);
+}
+
+function getPointerSnapshot() {
+  return window.matchMedia("(pointer: fine)").matches;
+}
+
+function getServerPointerSnapshot() {
+  return false;
+}
+
 export function CursorGlow() {
-  const [enabled, setEnabled] = useState(false);
+  const enabled = useSyncExternalStore(
+    subscribePointer,
+    getPointerSnapshot,
+    getServerPointerSnapshot
+  );
   const spring = { stiffness: 150, damping: 20 };
   const x = useSpring(0, spring);
   const y = useSpring(0, spring);
 
   useEffect(() => {
-    const finePointer = window.matchMedia("(pointer: fine)").matches;
-    setEnabled(finePointer);
-    if (!finePointer) return;
-
+    if (!enabled) return;
     const move = (e: MouseEvent) => {
       x.set(e.clientX);
       y.set(e.clientY);
     };
     window.addEventListener("mousemove", move);
     return () => window.removeEventListener("mousemove", move);
-  }, [x, y]);
+  }, [enabled, x, y]);
 
   if (!enabled) return null;
 

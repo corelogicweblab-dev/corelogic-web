@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Mail, MapPin, MessageSquare, Phone, Send, Loader2 } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { SITE, MAILTO_LINK } from "@/lib/site-config";
+import { SITE, MAILTO_LINK, TEL_LINK } from "@/lib/site-config";
 
 const GlobeScene = dynamic(
   () => import("@/components/three/GlobeScene").then((m) => m.GlobeScene),
@@ -20,28 +20,22 @@ const GlobeScene = dynamic(
   }
 );
 
-export function Contact() {
-  const searchParams = useSearchParams();
-  const [formState, setFormState] = useState({
+function buildInitialForm(project: string) {
+  return {
     name: "",
     email: "",
-    message: "",
-    project: "",
-  });
+    message: project
+      ? `I'm interested in learning more about ${project}.`
+      : "",
+    project,
+  };
+}
+
+function ContactForm({ project }: { project: string }) {
+  const [formState, setFormState] = useState(() => buildInitialForm(project));
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-
-  useEffect(() => {
-    const project = searchParams.get("project");
-    if (project) {
-      setFormState((s) => ({
-        ...s,
-        project,
-        message: s.message || `I'm interested in learning more about ${project}.`,
-      }));
-    }
-  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,7 +53,7 @@ export function Contact() {
       if (!res.ok) throw new Error(data.error || "Submission failed");
 
       setSuccess(data.message);
-      setFormState({ name: "", email: "", message: "", project: formState.project });
+      setFormState(buildInitialForm(project));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to send message");
     } finally {
@@ -82,6 +76,135 @@ export function Contact() {
     return `mailto:${SITE.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
+  return (
+    <>
+      <a
+        href={mailtoWithBody()}
+        className="mb-6 flex items-center gap-3 rounded-xl border border-[#00F5FF]/30 bg-[#00F5FF]/10 px-4 py-3 transition-all hover:border-[#00F5FF] hover:bg-[#00F5FF]/20 hover:shadow-[0_0_30px_rgba(0,245,255,0.2)]"
+      >
+        <Mail className="h-5 w-5 shrink-0 text-[#00F5FF]" />
+        <div>
+          <p className="text-xs text-[#94A3B8]">Email us directly</p>
+          <p className="text-sm font-semibold text-[#F8FAFC]">{SITE.email}</p>
+        </div>
+      </a>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {formState.project && (
+          <div className="rounded-lg border border-[#00F5FF]/20 bg-[#00F5FF]/5 px-4 py-2 text-sm text-[#00F5FF]">
+            Project: {formState.project}
+          </div>
+        )}
+        <div>
+          <label
+            htmlFor="name"
+            className="mb-2 block text-xs tracking-wider text-[#94A3B8] uppercase"
+          >
+            Your Name
+          </label>
+          <input
+            id="name"
+            type="text"
+            required
+            minLength={2}
+            value={formState.name}
+            onChange={(e) => setFormState((s) => ({ ...s, name: e.target.value }))}
+            className="w-full border-b border-[#00F5FF]/30 bg-transparent py-3 text-[#F8FAFC] outline-none transition-colors focus:border-[#00F5FF]"
+            placeholder="John Doe"
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="email"
+            className="mb-2 block text-xs tracking-wider text-[#94A3B8] uppercase"
+          >
+            Email Address
+          </label>
+          <input
+            id="email"
+            type="email"
+            required
+            value={formState.email}
+            onChange={(e) => setFormState((s) => ({ ...s, email: e.target.value }))}
+            className="w-full border-b border-[#00F5FF]/30 bg-transparent py-3 text-[#F8FAFC] outline-none transition-colors focus:border-[#00F5FF]"
+            placeholder="you@organization.gov"
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="message"
+            className="mb-2 block text-xs tracking-wider text-[#94A3B8] uppercase"
+          >
+            Message
+          </label>
+          <textarea
+            id="message"
+            required
+            minLength={10}
+            rows={4}
+            value={formState.message}
+            onChange={(e) => setFormState((s) => ({ ...s, message: e.target.value }))}
+            className="w-full resize-none border-b border-[#00F5FF]/30 bg-transparent py-3 text-[#F8FAFC] outline-none transition-colors focus:border-[#00F5FF]"
+            placeholder="Tell us about your project..."
+          />
+        </div>
+
+        {error && (
+          <p className="text-sm text-red-400" role="alert">
+            {error}
+          </p>
+        )}
+        {success && (
+          <p className="text-sm text-[#00FFB3]" role="status">
+            {success}
+          </p>
+        )}
+
+        <div className="flex flex-wrap gap-4 pt-2">
+          <a
+            href={mailtoWithBody()}
+            className="inline-flex items-center gap-2 rounded-lg border border-[#00F5FF]/30 px-5 py-3 text-sm font-medium text-[#F8FAFC] transition-all hover:border-[#00F5FF] hover:bg-[#00F5FF]/10"
+          >
+            <Mail className="h-4 w-4 text-[#00F5FF]" />
+            Email Directly
+          </a>
+          <button
+            type="submit"
+            disabled={loading}
+            className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#00F5FF] to-[#38BDF8] px-5 py-3 text-sm font-semibold text-[#050816] transition-all hover:shadow-[0_0_30px_rgba(0,245,255,0.3)] disabled:opacity-60"
+          >
+            {loading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Send className="h-4 w-4" />
+            )}
+            {loading ? "Sending..." : success ? "Sent" : "Send Message"}
+          </button>
+        </div>
+      </form>
+
+      <button
+        type="button"
+        onClick={() => document.dispatchEvent(new CustomEvent("open-live-chat"))}
+        className="mt-8 w-full rounded-xl border border-[#00F5FF]/10 bg-[#050816]/50 p-4 text-left transition-colors hover:border-[#00F5FF]/30"
+      >
+        <div className="mb-3 flex items-center gap-2">
+          <MessageSquare className="h-4 w-4 text-[#00FFB3]" />
+          <span className="text-xs font-medium text-[#00FFB3]">Live Support</span>
+          <span className="ml-auto h-2 w-2 animate-pulse rounded-full bg-[#00FFB3]" />
+        </div>
+        <p className="text-xs text-[#94A3B8]">
+          Open live chat for instant answers, or call {SITE.phone}.
+        </p>
+      </button>
+    </>
+  );
+}
+
+export function Contact() {
+  const searchParams = useSearchParams();
+  const project = searchParams.get("project") ?? "";
+
   const contactItems = [
     {
       icon: Mail,
@@ -94,7 +217,7 @@ export function Contact() {
       icon: Phone,
       label: "Phone",
       value: SITE.phone,
-      href: `tel:${SITE.phoneTel}`,
+      href: TEL_LINK,
     },
     {
       icon: MapPin,
@@ -120,125 +243,7 @@ export function Contact() {
             viewport={{ once: true }}
             className="glass-panel glow-cyan rounded-2xl p-8 xl:col-span-1"
           >
-            <a
-              href={mailtoWithBody()}
-              className="mb-6 flex items-center gap-3 rounded-xl border border-[#00F5FF]/30 bg-[#00F5FF]/10 px-4 py-3 transition-all hover:border-[#00F5FF] hover:bg-[#00F5FF]/20 hover:shadow-[0_0_30px_rgba(0,245,255,0.2)]"
-            >
-              <Mail className="h-5 w-5 shrink-0 text-[#00F5FF]" />
-              <div>
-                <p className="text-xs text-[#94A3B8]">Email us directly</p>
-                <p className="text-sm font-semibold text-[#F8FAFC]">{SITE.email}</p>
-              </div>
-            </a>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {formState.project && (
-                <div className="rounded-lg border border-[#00F5FF]/20 bg-[#00F5FF]/5 px-4 py-2 text-sm text-[#00F5FF]">
-                  Project: {formState.project}
-                </div>
-              )}
-              <div>
-                <label
-                  htmlFor="name"
-                  className="mb-2 block text-xs tracking-wider text-[#94A3B8] uppercase"
-                >
-                  Your Name
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  required
-                  minLength={2}
-                  value={formState.name}
-                  onChange={(e) => setFormState((s) => ({ ...s, name: e.target.value }))}
-                  className="w-full border-b border-[#00F5FF]/30 bg-transparent py-3 text-[#F8FAFC] outline-none transition-colors focus:border-[#00F5FF]"
-                  placeholder="John Doe"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="email"
-                  className="mb-2 block text-xs tracking-wider text-[#94A3B8] uppercase"
-                >
-                  Email Address
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  required
-                  value={formState.email}
-                  onChange={(e) => setFormState((s) => ({ ...s, email: e.target.value }))}
-                  className="w-full border-b border-[#00F5FF]/30 bg-transparent py-3 text-[#F8FAFC] outline-none transition-colors focus:border-[#00F5FF]"
-                  placeholder="you@organization.gov"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="message"
-                  className="mb-2 block text-xs tracking-wider text-[#94A3B8] uppercase"
-                >
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  required
-                  minLength={10}
-                  rows={4}
-                  value={formState.message}
-                  onChange={(e) => setFormState((s) => ({ ...s, message: e.target.value }))}
-                  className="w-full resize-none border-b border-[#00F5FF]/30 bg-transparent py-3 text-[#F8FAFC] outline-none transition-colors focus:border-[#00F5FF]"
-                  placeholder="Tell us about your project..."
-                />
-              </div>
-
-              {error && (
-                <p className="text-sm text-red-400" role="alert">
-                  {error}
-                </p>
-              )}
-              {success && (
-                <p className="text-sm text-[#00FFB3]" role="status">
-                  {success}
-                </p>
-              )}
-
-              <div className="flex flex-wrap gap-4 pt-2">
-                <a
-                  href={mailtoWithBody()}
-                  className="inline-flex items-center gap-2 rounded-lg border border-[#00F5FF]/30 px-5 py-3 text-sm font-medium text-[#F8FAFC] transition-all hover:border-[#00F5FF] hover:bg-[#00F5FF]/10"
-                >
-                  <Mail className="h-4 w-4 text-[#00F5FF]" />
-                  Email Directly
-                </a>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#00F5FF] to-[#38BDF8] px-5 py-3 text-sm font-semibold text-[#050816] transition-all hover:shadow-[0_0_30px_rgba(0,245,255,0.3)] disabled:opacity-60"
-                >
-                  {loading ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <Send className="h-4 w-4" />
-                  )}
-                  {loading ? "Sending..." : success ? "Sent" : "Send Message"}
-                </button>
-              </div>
-            </form>
-
-            <button
-              type="button"
-              onClick={() => document.dispatchEvent(new CustomEvent("open-live-chat"))}
-              className="mt-8 w-full rounded-xl border border-[#00F5FF]/10 bg-[#050816]/50 p-4 text-left transition-colors hover:border-[#00F5FF]/30"
-            >
-              <div className="mb-3 flex items-center gap-2">
-                <MessageSquare className="h-4 w-4 text-[#00FFB3]" />
-                <span className="text-xs font-medium text-[#00FFB3]">Live Support</span>
-                <span className="ml-auto h-2 w-2 animate-pulse rounded-full bg-[#00FFB3]" />
-              </div>
-              <p className="text-xs text-[#94A3B8]">
-                Open live chat for instant answers, or email {SITE.email} anytime.
-              </p>
-            </button>
+            <ContactForm key={project} project={project} />
           </motion.div>
 
           <motion.div

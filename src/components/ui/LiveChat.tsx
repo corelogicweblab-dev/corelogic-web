@@ -29,7 +29,8 @@ Makakakuha ka agad ng details about:
 
 **Try:** "paano magpagawa ng website?" o "services"
 
-📧 ${SITE.email}`;
+📧 ${SITE.email}
+📱 ${SITE.phone}`;
 
 function getSessionId() {
   if (typeof window === "undefined") return "";
@@ -57,7 +58,6 @@ function saveHistory(messages: ChatMessage[]) {
 
 export function LiveChat() {
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -69,21 +69,28 @@ export function LiveChat() {
     return () => document.removeEventListener("open-live-chat", openChat);
   }, []);
 
-  useEffect(() => {
-    const history = loadHistory();
-    if (history.length === 0) {
-      setMessages([
+  const [messages, setMessages] = useState<ChatMessage[]>(() => {
+    if (typeof window === "undefined") {
+      return [
         {
           id: "welcome",
           role: "assistant",
           text: WELCOME_MESSAGE,
           timestamp: new Date().toISOString(),
         },
-      ]);
-    } else {
-      setMessages(history);
+      ];
     }
-  }, []);
+    const history = loadHistory();
+    if (history.length > 0) return history;
+    return [
+      {
+        id: "welcome",
+        role: "assistant",
+        text: WELCOME_MESSAGE,
+        timestamp: new Date().toISOString(),
+      },
+    ];
+  });
 
   useEffect(() => {
     if (messages.length) saveHistory(messages);

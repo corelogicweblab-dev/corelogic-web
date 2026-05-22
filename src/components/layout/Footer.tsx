@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { NAV_LINKS, SOCIAL_LINKS } from "@/lib/constants";
 import { Logo } from "@/components/ui/Logo";
-import { SITE } from "@/lib/site-config";
+import { SITE, TEL_LINK, MAILTO_LINK } from "@/lib/site-config";
 
 export function Footer() {
   return (
@@ -15,12 +15,14 @@ export function Footer() {
               Next-generation AI infrastructure and systems engineering for
               enterprise and government.
             </p>
-            <a
-              href={`mailto:${SITE.email}`}
-              className="mt-3 inline-block text-sm text-[#00F5FF] hover:underline"
-            >
-              {SITE.email}
-            </a>
+            <div className="mt-3 flex flex-col gap-1 text-sm">
+              <a href={MAILTO_LINK} className="text-[#00F5FF] hover:underline">
+                {SITE.email}
+              </a>
+              <a href={TEL_LINK} className="text-[#94A3B8] hover:text-[#00F5FF]">
+                {SITE.phone}
+              </a>
+            </div>
           </div>
 
           <div>
