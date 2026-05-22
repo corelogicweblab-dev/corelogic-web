@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CoreLogic Web Lab
+
+Enterprise-grade, AI-powered technology company website built with Next.js, React, Tailwind CSS, Framer Motion, GSAP, and Three.js.
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+cd web
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Framework:** Next.js 16 (App Router)
+- **Styling:** Tailwind CSS v4
+- **Animation:** Framer Motion, GSAP
+- **3D:** Three.js, React Three Fiber, Drei
+- **Icons:** Lucide React
 
-## Learn More
+## Sections
 
-To learn more about Next.js, take a look at the following resources:
+1. Fullscreen Hero — neural network, particles, HUD dashboard
+2. Services — 10 interactive service cards
+3. Featured Solutions — 5 project showcases
+4. Technology Stack — animated tech grid
+5. Why CoreLogic — 8 enterprise feature cards
+6. Contact — form, direct email, live chat UI, 3D globe
+7. Footer — navigation and social links
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Optimized for Vercel:
 
-## Deploy on Vercel
+```bash
+npm run build
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Logo
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Place `corelogic.png` in `public/` (copied from project root). Used in navbar, footer, and favicon.
+
+## Functional Systems
+
+| Feature | How it works |
+|--------|----------------|
+| **Contact form** | `POST /api/contact` — validates, saves to `data/inquiries.json`, optional email via [Resend](https://resend.com) (`RESEND_API_KEY`) |
+| **Live chat** | Floating widget → `POST /api/chat` — intelligent auto-replies, persisted server-side |
+| **Email** | Direct `mailto:corelogicweblab@gmail.com` on Get Started, contact, and hero CTAs |
+| **Contact pills** | Working `mailto:`, `tel:`, and maps links |
+| **Hero HUD** | Polls `GET /api/health` every 30s for live uptime & service status |
+| **Solution demos** | “Request Demo” pre-fills contact form with project name |
+
+Default email: **corelogicweblab@gmail.com**
+
+## Customization
+
+- Contact email: `src/lib/site-config.ts` or `CONTACT_EMAIL` in `.env.local`
+- Social URLs: `src/lib/constants.ts`
