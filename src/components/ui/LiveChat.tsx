@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageSquare, Send, X } from "lucide-react";
+import { ChatMessageContent } from "@/components/ui/ChatMessageContent";
+import { SITE } from "@/lib/site-config";
 
 interface ChatMessage {
   id: string;
@@ -10,6 +12,24 @@ interface ChatMessage {
   text: string;
   timestamp: string;
 }
+
+const QUICK_PROMPTS = [
+  "Paano magpagawa ng website?",
+  "Ano ang services ninyo?",
+  "Magkano ang price?",
+  "Paano magsimula?",
+] as const;
+
+const WELCOME_MESSAGE = `Kumusta! Ako ang **CoreLogic Web Lab Live Support**.
+
+Makakakuha ka agad ng details about:
+• Website & web app development
+• Mobile apps, AI, government/LGU systems
+• Pricing, process, at tech stack
+
+**Try:** "paano magpagawa ng website?" o "services"
+
+📧 ${SITE.email}`;
 
 function getSessionId() {
   if (typeof window === "undefined") return "";
@@ -24,7 +44,7 @@ function getSessionId() {
 function loadHistory(): ChatMessage[] {
   if (typeof window === "undefined") return [];
   try {
-    const raw = sessionStorage.getItem("corelogic-chat-history");
+    const raw = sessionStorage.getItem("corelogic-chat-history-v2");
     return raw ? (JSON.parse(raw) as ChatMessage[]) : [];
   } catch {
     return [];
@@ -32,7 +52,7 @@ function loadHistory(): ChatMessage[] {
 }
 
 function saveHistory(messages: ChatMessage[]) {
-  sessionStorage.setItem("corelogic-chat-history", JSON.stringify(messages));
+  sessionStorage.setItem("corelogic-chat-history-v2", JSON.stringify(messages));
 }
 
 export function LiveChat() {
@@ -56,7 +76,7 @@ export function LiveChat() {
         {
           id: "welcome",
           role: "assistant",
-          text: "Welcome to CoreLogic Web Lab. Ask about our services, AI systems, or government platforms — we're here to help.",
+          text: WELCOME_MESSAGE,
           timestamp: new Date().toISOString(),
         },
       ]);
@@ -68,17 +88,16 @@ export function LiveChat() {
   useEffect(() => {
     if (messages.length) saveHistory(messages);
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages, open]);
+  }, [messages, open, loading]);
 
-  const sendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const text = input.trim();
-    if (!text || loading) return;
+  const sendText = async (text: string) => {
+    const trimmed = text.trim();
+    if (!trimmed || loading) return;
 
     const userMsg: ChatMessage = {
       id: crypto.randomUUID(),
       role: "user",
-      text,
+      text: trimmed,
       timestamp: new Date().toISOString(),
     };
     setMessages((prev) => [...prev, userMsg]);
@@ -90,7 +109,7 @@ export function LiveChat() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text, sessionId: getSessionId() }),
+        body: JSON.stringify({ message: trimmed, sessionId: getSessionId() }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to send");
@@ -109,6 +128,11 @@ export function LiveChat() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const sendMessage = (e: React.FormEvent) => {
+    e.preventDefault();
+    sendText(input);
   };
 
   return (
@@ -131,7 +155,7 @@ export function LiveChat() {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-6 right-6 z-50 flex h-[min(480px,80vh)] w-[min(380px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#00F5FF]/20 bg-[#0B1120]/95 shadow-[0_0_50px_rgba(0,245,255,0.15)] backdrop-blur-xl"
+            className="fixed bottom-6 right-6 z-50 flex h-[min(560px,85vh)] w-[min(420px,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-2xl border border-[#00F5FF]/20 bg-[#0B1120]/98 shadow-[0_0_50px_rgba(0,245,255,0.15)] backdrop-blur-xl"
           >
             <div className="flex items-center justify-between border-b border-[#00F5FF]/10 px-4 py-3">
               <div className="flex items-center gap-2">
@@ -148,25 +172,25 @@ export function LiveChat() {
               </button>
             </div>
 
-            <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto p-4">
+            <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto p-4 scroll-smooth">
               {messages.map((msg) => (
                 <div
                   key={msg.id}
                   className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                 >
                   <div
-                    className={`max-w-[85%] rounded-xl px-3 py-2 text-sm leading-relaxed ${
+                    className={`max-w-[92%] rounded-xl px-3 py-2.5 text-sm leading-relaxed ${
                       msg.role === "user"
                         ? "bg-[#00F5FF]/20 text-[#F8FAFC]"
-                        : "border border-[#00F5FF]/10 bg-[#050816]/80 text-[#94A3B8]"
+                        : "border border-[#00F5FF]/10 bg-[#050816]/90 text-[#94A3B8]"
                     }`}
                   >
-                    {msg.text}
+                    <ChatMessageContent text={msg.text} />
                   </div>
                 </div>
               ))}
               {loading && (
-                <p className="text-xs text-[#94A3B8] animate-pulse">CoreLogic is typing...</p>
+                <p className="text-xs text-[#00F5FF] animate-pulse">Nagtatype ang CoreLogic...</p>
               )}
             </div>
 
@@ -176,26 +200,41 @@ export function LiveChat() {
               </p>
             )}
 
-            <form onSubmit={sendMessage} className="border-t border-[#00F5FF]/10 p-3">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask about our services..."
-                  className="flex-1 rounded-lg border border-[#00F5FF]/20 bg-[#050816]/80 px-3 py-2 text-sm text-[#F8FAFC] outline-none focus:border-[#00F5FF]"
-                  disabled={loading}
-                />
-                <button
-                  type="submit"
-                  disabled={loading || !input.trim()}
-                  className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#00F5FF]/20 text-[#00F5FF] disabled:opacity-40"
-                  aria-label="Send message"
-                >
-                  <Send className="h-4 w-4" />
-                </button>
+            <div className="border-t border-[#00F5FF]/10 px-3 pt-2">
+              <div className="mb-2 flex flex-wrap gap-1.5">
+                {QUICK_PROMPTS.map((prompt) => (
+                  <button
+                    key={prompt}
+                    type="button"
+                    disabled={loading}
+                    onClick={() => sendText(prompt)}
+                    className="rounded-full border border-[#00F5FF]/20 bg-[#050816]/80 px-2.5 py-1 text-[10px] text-[#94A3B8] transition-colors hover:border-[#00F5FF]/40 hover:text-[#00F5FF] disabled:opacity-50"
+                  >
+                    {prompt}
+                  </button>
+                ))}
               </div>
-            </form>
+              <form onSubmit={sendMessage} className="pb-3">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder="Hal: paano magpagawa ng website?"
+                    className="flex-1 rounded-lg border border-[#00F5FF]/20 bg-[#050816]/80 px-3 py-2 text-sm text-[#F8FAFC] outline-none focus:border-[#00F5FF]"
+                    disabled={loading}
+                  />
+                  <button
+                    type="submit"
+                    disabled={loading || !input.trim()}
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#00F5FF]/20 text-[#00F5FF] disabled:opacity-40"
+                    aria-label="Send message"
+                  >
+                    <Send className="h-4 w-4" />
+                  </button>
+                </div>
+              </form>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
