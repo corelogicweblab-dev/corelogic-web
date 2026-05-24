@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { AppShell } from "@/components/providers/AppShell";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ClientWidgets } from "@/components/layout/ClientWidgets";
@@ -19,7 +20,7 @@ function ContactFallback() {
 
 export default function Home() {
   return (
-    <>
+    <AppShell>
       <Navbar />
       <main className="relative overflow-hidden bg-[#0a0f1c]">
         <Hero />
@@ -33,6 +34,6 @@ export default function Home() {
       </main>
       <Footer />
       <ClientWidgets />
-    </>
+    </AppShell>
   );
 }

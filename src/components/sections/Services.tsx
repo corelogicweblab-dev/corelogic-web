@@ -30,9 +30,9 @@ export function Services() {
             return (
               <motion.article
                 key={service.title}
-                variants={{ hidden: { opacity: 0, y: 32, rotateX: 8 }, show: { opacity: 1, y: 0, rotateX: 0 } }}
-                whileHover={{ y: -8, transition: { duration: 0.25 } }}
-                className="card-future group rounded-2xl p-6"
+                variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } }}
+                whileHover={{ y: -8 }}
+                className="card-future card-smooth-hover group rounded-2xl p-6"
               >
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400/20 to-violet-500/20 text-cyan-400 ring-1 ring-cyan-400/30 transition-all group-hover:scale-110 group-hover:from-cyan-400 group-hover:to-violet-500 group-hover:text-white group-hover:shadow-[0_0_28px_rgba(0,212,255,0.5)]">
                   <Icon className="h-6 w-6" />

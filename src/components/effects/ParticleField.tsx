@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { getPerformanceTier } from "@/lib/performance";
+import { getPerformanceTier, shouldSkipFrame } from "@/lib/performance";
 
 export function ParticleField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -52,8 +52,14 @@ export function ParticleField() {
     };
 
     let frame = 0;
-    const draw = () => {
+    let lastFrame = 0;
+    const draw = (now: number) => {
       if (!running) return;
+      if (shouldSkipFrame(now, lastFrame)) {
+        animationId = requestAnimationFrame(draw);
+        return;
+      }
+      lastFrame = now;
       const w = canvas.offsetWidth;
       const h = canvas.offsetHeight;
       ctx.clearRect(0, 0, w, h);
@@ -98,7 +104,7 @@ export function ParticleField() {
 
     resize();
     init();
-    draw();
+    animationId = requestAnimationFrame(draw);
 
     const onResize = () => {
       resize();
@@ -108,7 +114,7 @@ export function ParticleField() {
 
     const onVisibility = () => {
       running = document.visibilityState === "visible";
-      if (running) draw();
+      if (running) animationId = requestAnimationFrame(draw);
     };
     document.addEventListener("visibilitychange", onVisibility);
 

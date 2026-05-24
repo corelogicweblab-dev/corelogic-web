@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { getPerformanceTier } from "@/lib/performance";
+import { getPerformanceTier, shouldSkipFrame } from "@/lib/performance";
 
 export function NeuralBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -15,6 +15,7 @@ export function NeuralBackground() {
     const lite = getPerformanceTier() === "lite";
     let running = true;
     let animationId = 0;
+    let lastFrame = 0;
 
     const nodes: { x: number; y: number; vx: number; vy: number }[] = [];
     const nodeCount = lite ? 22 : 40;
@@ -42,8 +43,13 @@ export function NeuralBackground() {
       }
     };
 
-    const draw = () => {
+    const draw = (now: number) => {
       if (!running) return;
+      if (shouldSkipFrame(now, lastFrame)) {
+        animationId = requestAnimationFrame(draw);
+        return;
+      }
+      lastFrame = now;
       const w = canvas.offsetWidth;
       const h = canvas.offsetHeight;
       ctx.clearRect(0, 0, w, h);
@@ -84,7 +90,7 @@ export function NeuralBackground() {
 
     resize();
     initNodes();
-    draw();
+    animationId = requestAnimationFrame(draw);
 
     const onResize = () => {
       resize();
@@ -94,7 +100,7 @@ export function NeuralBackground() {
 
     const onVisibility = () => {
       running = document.visibilityState === "visible";
-      if (running) draw();
+      if (running) animationId = requestAnimationFrame(draw);
     };
     document.addEventListener("visibilitychange", onVisibility);
 

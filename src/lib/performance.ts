@@ -44,3 +44,9 @@ export function deferNonCritical(callback: () => void, timeoutMs = 2500) {
   const id = win.setTimeout(callback, 400);
   return () => win.clearTimeout(id);
 }
+
+/** Cap canvas/RAF loops for smoother main thread (default ~30fps). */
+export function shouldSkipFrame(timestamp: number, lastFrame: number, targetFps = 30): boolean {
+  const interval = 1000 / targetFps;
+  return timestamp - lastFrame < interval;
+}

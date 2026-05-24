@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useSyncExternalStore } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 import { motion, useSpring } from "framer-motion";
 
 function subscribePointer(callback: () => void) {
@@ -23,30 +23,43 @@ export function CursorGlow() {
     getPointerSnapshot,
     getServerPointerSnapshot
   );
-  const spring = { stiffness: 150, damping: 20 };
-  const x = useSpring(0, spring);
-  const y = useSpring(0, spring);
+  const x = useSpring(0, { stiffness: 120, damping: 28, mass: 0.4 });
+  const y = useSpring(0, { stiffness: 120, damping: 28, mass: 0.4 });
+  const pending = useRef({ x: 0, y: 0 });
+  const rafId = useRef(0);
 
   useEffect(() => {
     if (!enabled) return;
-    const move = (e: MouseEvent) => {
-      x.set(e.clientX);
-      y.set(e.clientY);
+
+    const flush = () => {
+      rafId.current = 0;
+      x.set(pending.current.x);
+      y.set(pending.current.y);
     };
-    window.addEventListener("mousemove", move);
-    return () => window.removeEventListener("mousemove", move);
+
+    const move = (e: PointerEvent) => {
+      pending.current = { x: e.clientX, y: e.clientY };
+      if (!rafId.current) {
+        rafId.current = requestAnimationFrame(flush);
+      }
+    };
+
+    window.addEventListener("pointermove", move, { passive: true });
+    return () => {
+      window.removeEventListener("pointermove", move);
+      if (rafId.current) cancelAnimationFrame(rafId.current);
+    };
   }, [enabled, x, y]);
 
   if (!enabled) return null;
 
   return (
     <motion.div
-      className="pointer-events-none fixed top-0 left-0 z-[9999] hidden md:block"
+      className="pointer-events-none fixed top-0 left-0 z-[9999] hidden md:block smooth-gpu"
       style={{ x, y, translateX: "-50%", translateY: "-50%" }}
     >
-      <div className="h-72 w-72 rounded-full bg-cyan-400/20 blur-[90px]" />
-      <div className="absolute top-1/2 left-1/2 h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-400/15 blur-[60px]" />
-      <div className="absolute top-1/2 left-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-400/50 bg-cyan-400/20 shadow-[0_0_12px_rgba(0,212,255,0.5)]" />
+      <div className="h-64 w-64 rounded-full bg-cyan-400/15 blur-[72px]" />
+      <div className="absolute top-1/2 left-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-400/40 bg-cyan-400/15" />
     </motion.div>
   );
 }

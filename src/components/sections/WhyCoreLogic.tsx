@@ -29,17 +29,13 @@ export function WhyCoreLogic() {
             return (
               <motion.article
                 key={feature.title}
-                variants={{ hidden: { opacity: 0, y: 28 }, show: { opacity: 1, y: 0 } }}
+                variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } }}
                 whileHover={{ y: -6 }}
-                className="card-future rounded-2xl p-6"
+                className="card-future card-smooth-hover rounded-2xl p-6"
               >
-                <motion.div
-                  whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
-                  transition={{ duration: 0.5 }}
-                  className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-400/15 text-cyan-400 ring-1 ring-cyan-400/30"
-                >
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-400/15 text-cyan-400 ring-1 ring-cyan-400/30 transition-transform duration-300 hover:scale-105">
                   <Icon className="h-5 w-5" />
-                </motion.div>
+                </div>
                 <h3 className="font-[family-name:var(--font-space-grotesk)] text-base font-bold text-slate-100">
                   {feature.title}
                 </h3>

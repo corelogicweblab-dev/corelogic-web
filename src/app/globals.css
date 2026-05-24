@@ -25,6 +25,13 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
@@ -32,6 +39,9 @@ body {
   color: var(--text-primary);
   font-family: var(--font-inter), system-ui, sans-serif;
   overflow-x: hidden;
+  overscroll-behavior-y: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 ::selection {
@@ -63,7 +73,10 @@ body {
   box-shadow:
     0 4px 24px rgba(0, 0, 0, 0.35),
     0 0 40px rgba(0, 180, 255, 0.06);
-  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateZ(0);
 }
 
 .card-future::before {
@@ -86,13 +99,12 @@ body {
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   opacity: 0;
-  animation: border-flow 4s ease infinite;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.35s ease;
   pointer-events: none;
 }
 
 .card-future:hover {
-  transform: translateY(-8px) scale(1.02);
+  transform: translateY(-8px) translateZ(0);
   box-shadow:
     0 24px 56px rgba(0, 0, 0, 0.45),
     0 0 80px rgba(0, 180, 255, 0.15);
@@ -100,6 +112,11 @@ body {
 
 .card-future:hover::before {
   opacity: 1;
+  animation: border-flow 4s ease infinite;
+}
+
+.card-smooth-hover {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .hud-corners {
@@ -235,7 +252,6 @@ body {
     rgba(0, 212, 255, 0.03) 4px
   );
   pointer-events: none;
-  animation: scanline-flicker 0.15s steps(2) infinite;
 }
 
 .badge-future {
@@ -507,7 +523,113 @@ body {
   .btn-primary::after,
   .card-future::before,
   .chat-fab-pulse,
-  .hud-bar {
+  .hud-bar,
+  .section-ambient,
+  .anim-soft-pulse,
+  .preview-bar,
+  .preview-dot,
+  .ai-ring {
     animation: none !important;
+  }
+}
+
+/* —— Smooth system layer —— */
+.smooth-gpu {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.section-ambient {
+  will-change: opacity;
+  animation: mesh-pulse 8s ease-in-out infinite;
+}
+
+.anim-soft-pulse {
+  animation: soft-pulse 2.5s ease-in-out infinite;
+}
+
+.anim-orb-drift-a {
+  animation: orb-drift-a 14s ease-in-out infinite;
+}
+
+.anim-orb-drift-b {
+  animation: orb-drift-b 16s ease-in-out infinite;
+}
+
+.preview-bar {
+  animation: preview-bar-pulse 2s ease-in-out infinite;
+}
+
+.preview-bar-sm {
+  animation: soft-pulse 2.2s ease-in-out infinite;
+}
+
+.preview-dot {
+  animation: dot-pulse 1.8s ease-in-out infinite;
+}
+
+.preview-chart-bar {
+  animation: bar-bounce 1.6s ease-in-out infinite;
+}
+
+.preview-progress {
+  animation: progress-sweep 2.5s ease-in-out infinite;
+  transform-origin: left;
+}
+
+.ai-ring {
+  animation: orbit-spin 24s linear infinite;
+}
+
+@keyframes soft-pulse {
+  0%,
+  100% {
+    opacity: 0.88;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes preview-bar-pulse {
+  0%,
+  100% {
+    opacity: 0.75;
+    transform: scaleX(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(0.95);
+  }
+}
+
+@keyframes dot-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+}
+
+@keyframes progress-sweep {
+  0%,
+  100% {
+    transform: scaleX(0.35);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .holo-glass {
+    backdrop-filter: blur(14px) saturate(1.2);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
   }
 }
