@@ -17,10 +17,10 @@ export function WhyCoreLogic() {
         <motion.div
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-40px" }}
           variants={{
             hidden: { opacity: 0 },
-            show: { transition: { staggerChildren: 0.08 } },
+            show: { opacity: 1, transition: { staggerChildren: 0.08 } },
           }}
           className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
         >
